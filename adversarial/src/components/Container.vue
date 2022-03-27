@@ -40,6 +40,7 @@ export default {
 </script>
 
 <style>
+
 .mainImage {
   max-width: 100%;
   height: auto;
