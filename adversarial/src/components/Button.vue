@@ -1,8 +1,6 @@
 <template>
 	<div class="wrapper">
-		<div class="button">
-			<input class="btn btn-primary" type="button" @click = "onClick()"/>
-		</div>
+			<input class="button btn btn-primary" type="button" value="Click here" @click = "onClick()"/>
 		<div class="uploader">
 			<input id="fileid" type="file" accept="image/*" @change = "upload()" hidden/>
 		</div>
