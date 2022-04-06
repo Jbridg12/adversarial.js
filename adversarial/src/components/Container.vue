@@ -77,6 +77,7 @@ export default {
 .imageContainer {
   width: 55%;
   height: fit-content;
+  padding-top: 4em;
 }
 
 .upload {
