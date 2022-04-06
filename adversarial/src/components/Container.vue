@@ -2,13 +2,13 @@
   <div class="wrapper">
     <div class="options">
       <div class="label">Select a Model</div>
-      <ModelDropDown/>
+      <div class="drop-down"><ModelDropDown/></div>
       <div class="label">Select a Dataset</div>
-      <DatasetDropDown/>
+      <div class="drop-down"><DatasetDropDown/></div>
       <div class="label">Select an Attack</div>
-      <AttackDropDown/>
+      <div class="drop-down"><AttackDropDown/></div>
       <div class="label">Turn This Image Into a/an:</div>
-      <ImageDropDown/>
+      <div class="drop-down"><ImageDropDown/></div>
     </div>
     <div class="imageContainer">
       <ImageContainer />
@@ -37,7 +37,7 @@ export default {
   components: {
     Button,
     ModelDropDown,
-	DatasetDropDown,
+    DatasetDropDown,
     AttackDropDown,
     ImageDropDown,
     ImageContainer
@@ -95,67 +95,71 @@ export default {
   padding-bottom: .3em;
 }
 
+.drop-down {
+  margin: auto;
+  text-align: center;
+}
+
 @media (max-width: 600px) {
 
-.mainImage {
-  max-width: 100%;
-  height: auto;
-}
+  .mainImage {
+    max-width: 100%;
+    height: auto;
+  }
 
-.label {
-  display: inline-block;
-  vertical-align: top;
-  padding-top: 25px;
-}
+  .label {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 25px;
+  }
 
-.wrapper {
-  width: 85%;
-  height: fit-content;
-  margin: auto;
-  margin-top: .5em;
-  padding: .1em;
-  display: flex;
-  flex-direction: column;
-  flex-flow: row wrap;
-  text-align: center;
-}
+  .wrapper {
+    width: 85%;
+    height: fit-content;
+    margin: auto;
+    margin-top: .5em;
+    padding: .1em;
+    display: flex;
+    flex-direction: column;
+    flex-flow: row wrap;
+    text-align: center;
+  }
 
-.options {
-  width: 100%;
-  height: fit-content;
-  padding: .5em;
-  text-align: center;
-  
-  
-}
+  .options {
+    width: 100%;
+    height: fit-content;
+    padding: .5em;
+    text-align: center;
+    
+    
+  }
 
-.generate {
-  width: 45%;
-  height: fit-content;
-  padding: 1em;
-}
+  .generate {
+    width: 45%;
+    height: fit-content;
+    padding: 1em;
+  }
 
-.imageContainer {
-  height: fit-content;
-  width: 100%;
-  height: 100%;
-  object-fit:contain;
-  background-color: rgb(255, 255, 255);
-  margin-top: auto;
-}
+  .imageContainer {
+    height: fit-content;
+    width: 100%;
+    height: 100%;
+    object-fit:contain;
+    background-color: rgb(255, 255, 255);
+    margin-top: auto;
+  }
 
-.upload {
-  width: 55%;
-  height: fit-content;
-  padding: 1em;
-}
+  .upload {
+    width: 55%;
+    height: fit-content;
+    padding: 1em;
+  }
 
-.label {
-  text-align: left;
-  padding-top: .8em;
-  padding-bottom: .3em;
-}
-
+  .label {
+    text-align: left;
+    padding-top: .8em;
+    padding-bottom: .3em;
+  }
 }
 </style>
 
