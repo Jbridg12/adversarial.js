@@ -18,6 +18,7 @@
     </div>
     <div class="upload">
       <Button value = "Upload Image" description="upload-image"/>
+      <br>
       <Button value = "Next Image" description="next-image"/>
     </div>
   </div>
