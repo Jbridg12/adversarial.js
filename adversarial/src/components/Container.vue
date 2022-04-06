@@ -89,8 +89,8 @@ export default {
   text-align: left;
   font-weight: 600;
   font-family: "Raleway";
-  padding-top: .8em;
-  padding-bottom: .3em;
+  padding-top: 1em;
+  padding-bottom: .5em;
 }
 
 .drop-down {
