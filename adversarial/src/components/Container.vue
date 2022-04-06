@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrap">
     <div class="options">
       <div class="label">Select a Model</div>
       <div class="drop-down"><ModelDropDown/></div>
@@ -19,13 +19,11 @@
     <div class="upload">
       <Button value = "Upload Image" description="upload-image"/>
       <Button value = "Next Image" description="next-image"/>
-
     </div>
   </div>
 </template>
 
 <script>
-
 import Button from './Button.vue'
 import ModelDropDown from './ModelDropDown.vue'
 import AttackDropDown from './AttackDropDown.vue'
@@ -51,7 +49,7 @@ export default {
   height: auto;
 }
 
-.wrapper {
+.wrap {
   background-color: #FFFFFF;
   width: 85%;
   height: fit-content;
@@ -113,7 +111,7 @@ export default {
     padding-top: 25px;
   }
 
-  .wrapper {
+  .wrap {
     width: 85%;
     height: fit-content;
     margin: auto;
