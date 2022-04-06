@@ -48,8 +48,7 @@ font-size: 15px;
 width: 22em;
 height: 4em;
 box-shadow: 1px 2px 4px #cecece;
-border-radius: 0;
-border: 0;
+border-radius: .3em;
 text-align: left;
 }
 </style>

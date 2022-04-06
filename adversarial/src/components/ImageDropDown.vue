@@ -30,7 +30,7 @@ font-size: 15px;
 width: 22em;
 height: 4em;
 box-shadow: 1px 2px 4px #cecece;
-border-radius: 0;
+border-radius: .3em;
 border: 0;
 text-align: left;
 }
