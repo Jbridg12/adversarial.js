@@ -45,7 +45,7 @@ background-color: #FFFFFF;
 color: #000000;
 font-family: "Raleway";
 font-size: 15px;
-width: 22em;
+width: 24em;
 height: 4em;
 box-shadow: 1px 2px 4px #cecece;
 border-radius: .3em;
