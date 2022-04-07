@@ -143,7 +143,7 @@ export default {
   }
 
   .generate {
-    width: 45%;
+    width: 20%;
     height: fit-content;
     padding: 1em;
   }
@@ -154,11 +154,11 @@ export default {
     height: 100%;
     object-fit:contain;
     background-color: rgb(255, 255, 255);
-    margin-top: auto;
+    padding:1em;
   }
 
   .upload {
-    width: 55%;
+    width: 20%;
     height: fit-content;
     padding: 1em;
   }
@@ -168,6 +168,18 @@ export default {
     padding-top: .8em;
     padding-bottom: .3em;
   }
+
+
+  .drop-down {
+    width: 100%;
+    text-align: center;
+  }
+  .dropdown-button {
+
+    width: 70%;
+    text-align: center;
+  }
+
 }
 </style>
 

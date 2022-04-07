@@ -48,7 +48,7 @@ table.predictionTable td.data {
   vertical-align: top;
 }
 
-/* @media (max-width: 600px) {
+ @media (max-width: 600px) {
 
 .prediction {
   position: fixed;
@@ -66,14 +66,9 @@ table.predictionTable {
   font-size: 12px;
   font-weight: bold;
   text-align: center;
+  margin:1em;
 }
-  /* .links {
-
-  } */
-
-  /* a {
-
-  }
-}*/
+  
+}
 
 </style>
