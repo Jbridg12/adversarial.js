@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-			<input class="button" type="button" v-model=value @click = "onClick()">
+		<input class="button" type="button" v-model=value @click = "onClick()">
 		<div class="uploader">
 			<input id="fileid" type="file" accept="image/*" @change = "upload()" hidden/>
 		</div>
