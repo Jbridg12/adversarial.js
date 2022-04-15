@@ -169,20 +169,12 @@ let imagenetMobilenet;
 async function loadImagenetModel() {
   if (imagenetVgg16 == undefined) { imagenetVgg16 = await tf.loadGraphModel('data/imagenet/vgg16/model.json'); }
   if (imagenetResnet == undefined) { imagenetResnet = await tf.loadGraphModel('data/imagenet/resnet/model.json'); }
-  //if (imagenetXception == undefined) { imagenetXception = await tf.loadLayersModel('data/imagenet/xception/model.json'); }
-  //if (imagenetMobilenet == undefined) { imagenetMobilenet = await tf.loadLayersModel('data/imagenet/mobilenet/model.json'); }
-  if (imagenetMobilenet == undefined) { imagenetMobilenet = await mobilenet.load({version: 2, alpha: 1.0}); }
+  if (imagenetXception == undefined) { imagenetXception = await tf.loadGraphModel('data/imagenet/xception/model.json'); }
+  if (imagenetMobilenet == undefined) { imagenetMobilenet = await tf.loadGraphModel('data/imagenet/mobilenet/model.json'); }
+  //if (imagenetMobilenet == undefined) { imagenetMobilenet = await mobilenet.load({version: 2, alpha: 1.0}); }
   
   
-  imagenetMobilenet.predict = function (img) {
-    return this.predictLogits(img).softmax();
-  }
-  imagenetMobilenet.predictLogits = function (img) {
-    // Remove the first "background noise" logit
-    // Copied from: https://github.com/tensorflow/tfjs-models/blob/708e3911fb01d0dfe70448acc3e8ca736fae82d3/mobilenet/src/index.ts#L232
-    const logits1001 = this.model.predict(img);
-    return logits1001.slice([0, 1], [-1, 1000]);
-  }
+
   /*         Old Code for Mobilenet Imagnet Classifier
   if (imagenetModel !== undefined) { return; }
   imagenetModel = await mobilenet.load({version: 2, alpha: 1.0});
@@ -239,9 +231,6 @@ export function nextImage(){
 	resetOnNewImage();
 	//resetAttack();
 }
-//$('#next-image').addEventListener('click', showNextImage);
-//$('#next-image').addEventListener('click', resetOnNewImage);
-//$('#next-image').addEventListener('click', resetAttack);
 
 // Upload image button
 
@@ -253,9 +242,6 @@ export function uploadImage(){
 	getImg();
 	resetOnNewImage();
 
-	
-	//showNextImage();
-	//resetOnNewImage();
 	//resetAttack();
 }
 // Predict button (original image
@@ -264,18 +250,14 @@ export function predictImg(){
     predict();
     //removeTopRightOverlay();
 }
-//$('#predict-original').addEventListener('click', predict);
-//$('#predict-original').addEventListener('click', removeTopRightOverlay);
 
 // Target label dropdown
-//$('#select-target').addEventListener('change', resetAttack);
 let selectedTarget = 0;
 export function changeTarget(target){
 	selectedTarget =  parseInt(target);
 }
 
 // Attack algorithm dropdown
-//$('#select-attack').addEventListener('change', resetAttack);
 let selectedAttack;
 export function changeAttack(attack){
 	selectedAttack = attack;
@@ -285,22 +267,23 @@ export function changeAttack(attack){
 let flag = true; // They have to press button twice, once to genereate, once to predict
 
 export function attack(){
-    console.log("Destroying all familiarity");
+    //console.log(document.getElementsByClassName('generate')[0].children[2].children[0]);
 	if(flag){
+		console.log("Destroying all familiarity");
+		resetAdvPrediction();
+		//document.getElementsByClassName('generate')[0].children[2].children[0]._value = "Processing"
 		generateAdv();
 		flag = false;
 	}
 	else{
+		console.log("Showing all familiarity");
 		predictAdv();
+		//document.getElementsByClassName('generate')[0].children[2].children[0]._value = "Generate"
 		flag = true;
 	}
-    //removeTopRightOverlay();
 }
-//$('#generate-adv').addEventListener('click', generateAdv);
 //$('#generate-adv').addEventListener('click', removeBottomRightOverlay);
 
-// Predict button (adversarial image)
-//$('#predict-adv').addEventListener('click', predictAdv);
 
 // View noise / view image link
 //$('#view-noise').addEventListener('click', viewNoise);
@@ -450,7 +433,7 @@ async function predict() {
 
     // Display prediction
     let status = {msg: '✅ Prediction is Correct.', statusClass: 'status-green'};  // Predictions on the sample should always be correct
-    showPrediction(`Prediction: "${CLASS_NAMES[predLblIdx]}"<br/>Probability: ${(predProb * 100).toFixed(2)}%`, status);
+    showPrediction(`"${CLASS_NAMES[predLblIdx]}"<br/>Probability: ${(predProb * 100).toFixed(2)}%`, status);
   }
  }
 
@@ -497,7 +480,7 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = cifarXception; }
     else if (architecture === 'mobilenet') {adv_model = cifarMobilenet; }
     
-    await _generateAdv(adv_model, cifarDataset[cifarIdx].xs, cifarDataset[cifarIdx].ys, CIFAR_CLASSES, CIFAR_CONFIGS[attack.name]);
+    await _generateAdv(adv_model, cifarDataset[cifarIdx].xs, cifarDataset[cifarIdx].ys, CIFAR_CLASSES, CIFAR_CONFIGS[selectedAttack]);
   } else if (dataset === 'gtsrb') {
     await loadGtsrbModel();
     await loadingGtsrb;
@@ -507,7 +490,7 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = gtsrbXception; }
     else if (architecture === 'mobilenet') {adv_model = gtsrbMobilenet; }
     
-    await _generateAdv(adv_model, gtsrbDataset[gtsrbIdx].xs, gtsrbDataset[gtsrbIdx].ys, GTSRB_CLASSES, GTSRB_CONFIGS[attack.name]);
+    await _generateAdv(adv_model, gtsrbDataset[gtsrbIdx].xs, gtsrbDataset[gtsrbIdx].ys, GTSRB_CLASSES, GTSRB_CONFIGS[selectedAttack]);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -517,7 +500,7 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = imagenetXception; }
     else if (architecture === 'mobilenet') {adv_model = imagenetMobilenet; }
     
-    await _generateAdv(adv_model, imagenetX[imagenetIdx], imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[attack.name]);
+    await _generateAdv(adv_model, imagenetX[imagenetIdx], imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
   } else if (dataset === 'upload') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -527,7 +510,7 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = imagenetXception; }
     else if (architecture === 'mobilenet') {adv_model = imagenetMobilenet; }
     
-    await _generateAdv(adv_model, loadedUpload, imagenetY[0], IMAGENET_CLASSES, IMAGENET_CONFIGS[attack.name]);
+    await _generateAdv(adv_model, loadedUpload, imagenetY[0], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
   }
 
   //$('#latency-msg').style.display = 'none';
@@ -548,7 +531,7 @@ async function generateAdv() {
     let pred = model.predict(aimg);
     let predLblIdx = pred.argMax(1).dataSync()[0];
     let predProb = pred.max().dataSync()[0];
-    advPrediction = `Prediction: "${CLASS_NAMES[predLblIdx]}"<br/>Probability: ${(predProb * 100).toFixed(2)}%`;
+    advPrediction = ` "${CLASS_NAMES[predLblIdx]}"<br/>Probability: ${(predProb * 100).toFixed(2)}%`;
 
     // Compute & store attack success/failure message
     let lblIdx = lbl.argMax(1).dataSync()[0];
@@ -565,6 +548,7 @@ async function generateAdv() {
     let noise = tf.sub(aimg, img).add(0.5).clipByValue(0, 1);  // [Szegedy 14] Intriguing properties of neural networks
     drawImg(noise, 'adversarial-noise');
 	console.log("Adversified");
+	//document.getElementsByClassName('generate')[0].children[2].__vue__._props.value = "Print Results"
   }
 }
 
@@ -645,26 +629,24 @@ function resetAvailableAttacks() {
   const GTSRB_TARGETS = [8, 0, 14, 17];
   const IMAGENET_TARGETS = [934, 413, 151];
 
-  let modelName = 'mnist';
-  //let modelName = $('#select-model').value;
-  if (modelName === 'mnist') {
+  
+  if (dataset === 'mnist') {
     let originalLbl = mnistDataset[mnistIdx].ys.argMax(1).dataSync()[0];
     _resetAvailableAttacks(true, originalLbl, MNIST_TARGETS, MNIST_CLASSES);
-  } else if (modelName === 'cifar') {
+  } else if (dataset === 'cifar') {
     let originalLbl = cifarDataset[cifarIdx].ys.argMax(1).dataSync()[0];
     _resetAvailableAttacks(true, originalLbl, CIFAR_TARGETS, CIFAR_CLASSES);
    }
-  else if (modelName === 'gtsrb') {
+  else if (dataset === 'gtsrb') {
     let originalLbl = gtsrbDataset[gtsrbIdx].ys.argMax(1).dataSync()[0];
     _resetAvailableAttacks(false, originalLbl, GTSRB_TARGETS, GTSRB_CLASSES);
   }
-  else if (modelName === 'imagenet') {
+  else if (dataset === 'imagenet') {
     let originalLbl = imagenetYLbls[imagenetIdx];
     _resetAvailableAttacks(false, originalLbl, IMAGENET_TARGETS, IMAGENET_CLASSES);
   }
 
   function _resetAvailableAttacks(jsma, originalLbl, TARGETS, CLASS_NAMES) {
-    let modelName = $('#select-model').value;
     let selectAttack = $('#select-attack');
     let selectTarget = $('#select-target');
 
@@ -677,7 +659,7 @@ function resetAvailableAttacks() {
     }
 
     // Filter available target classes in dropdown
-    if (selectTarget.getAttribute('data-model') === modelName) {
+    if (selectTarget.getAttribute('data-model') === dataset) {
       // Go through options and disable the current class as a target class
       selectTarget.options.forEach(option => {
         if (parseInt(option.value) === originalLbl) { option.disabled = true; }
@@ -698,7 +680,7 @@ function resetAvailableAttacks() {
         if (i === originalLbl) { option.disabled = true; }
         selectTarget.appendChild(option);
       });
-      selectTarget.setAttribute('data-model', modelName);
+      selectTarget.setAttribute('data-model', dataset);
     }
   }
 }
@@ -777,15 +759,30 @@ function supports32BitWebGL() {
 function showPrediction(msg, status) {
   console.log("predicting, no writing");
   $('#prediction').innerHTML = msg;
-  $('#prediction').style.display = 'block';
+  $('#prediction').style.display = 'inline';
   $('#prediction-status').innerHTML = status.msg;
   $('#prediction-status').className = status.statusClass;
   $('#prediction-status').style.marginBottom = '15px';
 }
 
+function resetPrediction() {
+  $('#prediction').innerHTML = '';
+  $('#prediction').style.display = 'inline';
+  $('#prediction-status').innerHTML = '';
+  $('#prediction-status').className = '';
+  $('#prediction-status').style.marginBottom = '15px';
+}
+
+function resetAdvPrediction() {
+  $('#prediction-adv').innerHTML = '';
+  $('#prediction-adv').style.display = 'inline';
+  $('#prediction-adv-status').innerHTML = '';
+  $('#prediction-adv-status').className = '';
+  $('#prediction-adv-status').style.marginBottom = '15px';
+}
 function showAdvPrediction(msg, status) {
   $('#prediction-adv').innerHTML = msg;
-  $('#prediction-adv').style.display = 'block';
+  $('#prediction-adv').style.display = 'inline';
   $('#prediction-adv-status').innerHTML = status.msg;
   $('#prediction-adv-status').className = status.statusClass;
   $('#prediction-adv-status').style.marginBottom = '15px';
