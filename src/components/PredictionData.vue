@@ -9,8 +9,8 @@
       <td class="data"> Prediction: <div id="prediction-adv"></div></td>
     </tr>
     <tr>
-      <td class="data"> Probability: <div id="prediction-status"></div></td>
-      <td class="data"> Probability: <div id="prediction-adv-status"></div></td>
+      <td class="data"> Result: <div id="prediction-status"></div></td>
+      <td class="data"> Result: <div id="prediction-adv-status"></div></td>
     </tr>
   </table>   
 </template>
