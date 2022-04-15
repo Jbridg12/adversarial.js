@@ -31,14 +31,7 @@ export default {
   max-width: 1300px;
   height: fit-content;
   margin: auto;
-  margin-top: 4em;
-  padding: 1em;
-}
-
-@media (max-width: 600px) {
-  .wrap {
-    margin-top: .5em;
-    padding: .1em;
-  }
+  margin-top: 6vh;
+  padding: 2vw;
 }
 </style>
