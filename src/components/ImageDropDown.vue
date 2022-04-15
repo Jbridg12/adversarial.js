@@ -12,6 +12,7 @@
 </template>
   
 <script>
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {changeTarget} from "../../public/js/intro.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
@@ -40,25 +41,33 @@ export default {
       },
       {id: 'gtsrb',
         options: [
-          {key: "120km/hr", value: '120'},
-          {key: "20km/hr", value: '20'},
-          {key: "stop", value: 'stop'},
-          {key: "Do Not Enter", value: 'Do Not Enter'},
+          {key: "120km/hr", value: '0'},
+          {key: "20km/hr", value: '1'},
+          {key: "stop", value: '2'},
+          {key: "Do Not Enter", value: '3'},
         ]
       },
       {id: 'cifar',
         options: [
-          {key: "Car", value: "car"},
-          {key: "Bird", value: "bird"},
-          {key: "Cat", value: "cat"},
-          {key: "Deer", value: "deer"},
-          {key: "Dog", value: "dog"},
-          {key: "Frog", value: "frog"},
-          {key: "Horse", value: "Horse"},
-          {key: "Ship", value: "ship"},
-          {key: "Truck", value: "truck"},
+          {key: "Car", value: "0"},
+          {key: "Bird", value: "1"},
+          {key: "Cat", value: "2"},
+          {key: "Deer", value: "3"},
+          {key: "Dog", value: "4"},
+          {key: "Frog", value: "5"},
+          {key: "Horse", value: "6"},
+          {key: "Ship", value: "7"},
+          {key: "Truck", value: "8"},
         ]
-      },        
+      },
+	  {id: 'imagenet',
+        options: [
+          {key: "Potato", value: '300'},
+          {key: "Rifle", value: '122'},
+          {key: "Church", value: '5'},
+          {key: "Do Not Enter", value: '55'},
+        ]
+		}
     ],
     key: "Select Target",
     value: "0",
@@ -76,6 +85,7 @@ export default {
     }
   }
 }  
+/* eslint-enable no-mixed-spaces-and-tabs */
 </script>
 
 
