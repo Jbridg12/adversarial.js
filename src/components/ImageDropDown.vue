@@ -63,7 +63,7 @@ export default {
 	  {id: 'imagenet',
         options: [
           {key: "Potato", value: '300'},
-          {key: "Rifle", value: '122'},
+          {key: "American Lobster", value: '122'},
           {key: "Church", value: '5'},
           {key: "Do Not Enter", value: '55'},
         ]

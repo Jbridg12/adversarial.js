@@ -219,16 +219,13 @@ export function changeDataset(ds){
 	resetOnNewImage();
 	//resetAttack();
 }
-//$('#select-model').addEventListener('change', showImage);
-//$('#select-model').addEventListener('change', resetOnNewImage);
-//$('#select-model').addEventListener('change', resetAttack);
-//$('#select-model').addEventListener('change', removeLeftOverlay);
 
 // Next image button
 export function nextImage(){
 	if (dataset === 'upload'){dataset = revertDataset;}
 	showNextImage();
 	resetOnNewImage();
+	resetAdvPrediction();
 	//resetAttack();
 }
 
@@ -241,6 +238,7 @@ export function uploadImage(){
 	dataset = 'upload';
 	getImg();
 	resetOnNewImage();
+	resetAdvPrediction();
 
 	//resetAttack();
 }
@@ -267,10 +265,9 @@ export function changeAttack(attack){
 let flag = true; // They have to press button twice, once to genereate, once to predict
 
 export function attack(){
-    //console.log(document.getElementsByClassName('generate')[0].children[2].children[0]);
 	if(flag){
-		console.log("Destroying all familiarity");
 		resetAdvPrediction();
+		console.log("Destroying all familiarity");
 		//document.getElementsByClassName('generate')[0].children[2].children[0]._value = "Processing"
 		generateAdv();
 		flag = false;
@@ -309,9 +306,11 @@ async function getImg(){
 	let loadedUploadData = Promise.all(loadingUpload);
 	
 	await loadedUploadData.then(() => {
-		let img = document.getElementsByClassName("upload_img")[0];
-		console.log(tf.browser.fromPixels(img).div(255.0).reshape([1, 224, 224, 3]));
-		loadedUpload = tf.browser.fromPixels(img).div(255.0).reshape([1, 224, 224, 3]);
+		let imgCon = document.getElementsByClassName("upload_img")[0];
+		let img = tf.browser.fromPixels(imgCon).div(255.0);
+		img = tf.image.resizeNearestNeighbor(img, [224, 224]);
+		
+		loadedUpload = img.reshape([1, 224, 224, 3]);
 	});
 	
 	drawImg(loadedUpload, "original");
