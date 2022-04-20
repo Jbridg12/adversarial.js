@@ -208,7 +208,8 @@ let architecture = "resnet"
 export function changeArchitecture(arch){
 	architecture = arch;
 	showImage();
-	resetOnNewImage();
+	resetPrediction();
+	resetAdvPrediction();
 	//resetAttack();
 }
 
@@ -216,7 +217,8 @@ let dataset = "mnist"
 export function changeDataset(ds){
 	dataset = ds
 	showImage();
-	resetOnNewImage();
+	resetPrediction();
+	resetAdvPrediction();
 	//resetAttack();
 }
 
@@ -224,24 +226,22 @@ export function changeDataset(ds){
 export function nextImage(){
 	if (dataset === 'upload'){dataset = revertDataset;}
 	showNextImage();
-	resetOnNewImage();
+	resetPrediction();
 	resetAdvPrediction();
 	//resetAttack();
 }
 
 // Upload image button
-
 let revertDataset;
 export function uploadImage(){
 	console.log("Stealing all your private data.");
 	revertDataset = dataset;
 	dataset = 'upload';
 	getImg();
-	resetOnNewImage();
+	resetPrediction();
 	resetAdvPrediction();
-
-	//resetAttack();
 }
+
 // Predict button (original image
 export function predictImg(){
     console.log("Releasing private data");
@@ -252,12 +252,14 @@ export function predictImg(){
 // Target label dropdown
 let selectedTarget = 0;
 export function changeTarget(target){
+	resetAdvPrediction();
 	selectedTarget =  parseInt(target);
 }
 
 // Attack algorithm dropdown
 let selectedAttack;
 export function changeAttack(attack){
+	resetAdvPrediction();
 	selectedAttack = attack;
 }
 
@@ -293,6 +295,7 @@ export function attack(){
 /**
  * Gets image uploaded by the user. 
  */
+let uploadLblIdx = 0;
 let loadedUpload;
 async function getImg(){
 	const input = document.getElementById("fileid");
@@ -352,9 +355,10 @@ async function predict() {
   //$('#predict-original').innerText = 'Loading...';
 
   let model;
+  console.log(architecture);
   if (dataset === 'mnist') {
     
-    console.log(architecture);
+    
     await loadMnistModel();
     await loadingMnist;    
     
@@ -396,28 +400,34 @@ async function predict() {
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
-    
-	console.log(architecture);
+
     if (architecture === 'resnet') { model = imagenetResnet; }
     else if (architecture === 'vgg16') {model = imagenetVgg16; }
     else if (architecture === 'xception') {model = imagenetXception; }
     else if (architecture === 'mobilenet') {model = imagenetMobilenet; }
-    
-	console.log(imagenetIdx);
-	console.log(imagenetX[imagenetIdx].shape);
 	
-    _predict(model, imagenetX[imagenetIdx], imagenetYLbls[imagenetIdx], IMAGENET_CLASSES);
+	if (architecture === 'xception') { 
+		_predict(model, tf.image.resizeNearestNeighbor(imagenetX[imagenetIdx], [299,299]), imagenetYLbls[imagenetIdx], IMAGENET_CLASSES);
+	}
+	else{
+		_predict(model, imagenetX[imagenetIdx], imagenetYLbls[imagenetIdx], IMAGENET_CLASSES);
+	}
+    
   } else if (dataset === 'upload') {
     await loadImagenetModel();
     await loadedImagenetData;
     
-	console.log(architecture);
     if (architecture === 'resnet') { model = imagenetResnet; }
     else if (architecture === 'vgg16') {model = imagenetVgg16; }
     else if (architecture === 'xception') {model = imagenetXception; }
     else if (architecture === 'mobilenet') {model = imagenetMobilenet; }
 	
-    _predict(model, loadedUpload, 'upload', IMAGENET_CLASSES);
+	if (architecture === 'xception') { 
+		_predict(model, tf.image.resizeNearestNeighbor(loadedUpload, [299,299]), 'upload', IMAGENET_CLASSES);
+	}
+	else{
+		_predict(model, loadedUpload, 'upload', IMAGENET_CLASSES);
+	}
   }
 
   //$('#predict-original').innerText = 'Run Neural Network';
@@ -425,10 +435,10 @@ async function predict() {
   function _predict(model, img, lblIdx, CLASS_NAMES) {
     // Generate prediction
     let pred = model.predict(img);
-    //console.log(pred.dataSync())
     console.log(pred.max().dataSync())
     let predLblIdx = pred.argMax(1).dataSync()[0];
     let predProb = pred.max().dataSync()[0];
+	if (dataset === 'upload') {uploadLblIdx = predLblIdx;}
 
     // Display prediction
     let status = {msg: '✅ Prediction is Correct.', statusClass: 'status-green'};  // Predictions on the sample should always be correct
@@ -499,7 +509,12 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = imagenetXception; }
     else if (architecture === 'mobilenet') {adv_model = imagenetMobilenet; }
     
-    await _generateAdv(adv_model, imagenetX[imagenetIdx], imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+	if (architecture === 'xception') { 
+		await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(imagenetX[imagenetIdx], [299,299]), imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+	}
+	else{
+		await _generateAdv(adv_model, imagenetX[imagenetIdx], imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+	}
   } else if (dataset === 'upload') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -509,7 +524,13 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = imagenetXception; }
     else if (architecture === 'mobilenet') {adv_model = imagenetMobilenet; }
     
-    await _generateAdv(adv_model, loadedUpload, imagenetY[0], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+	if (architecture === 'xception') { 
+		await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(loadedUpload, [299,299]), tf.oneHot(uploadLblIdx, 1000).reshape([1, 1000]), IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+	}
+	else{
+		await _generateAdv(adv_model, loadedUpload, tf.oneHot(uploadLblIdx, 1000).reshape([1, 1000]), IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+	}
+    
   }
 
   //$('#latency-msg').style.display = 'none';
@@ -761,7 +782,6 @@ function showPrediction(msg, status) {
   $('#prediction').style.display = 'inline';
   $('#prediction-status').innerHTML = status.msg;
   $('#prediction-status').className = status.statusClass;
-  $('#prediction-status').style.marginBottom = '15px';
 }
 
 function resetPrediction() {
@@ -769,7 +789,6 @@ function resetPrediction() {
   $('#prediction').style.display = 'inline';
   $('#prediction-status').innerHTML = '';
   $('#prediction-status').className = '';
-  $('#prediction-status').style.marginBottom = '15px';
 }
 
 function resetAdvPrediction() {
@@ -777,14 +796,12 @@ function resetAdvPrediction() {
   $('#prediction-adv').style.display = 'inline';
   $('#prediction-adv-status').innerHTML = '';
   $('#prediction-adv-status').className = '';
-  $('#prediction-adv-status').style.marginBottom = '15px';
 }
 function showAdvPrediction(msg, status) {
   $('#prediction-adv').innerHTML = msg;
   $('#prediction-adv').style.display = 'inline';
   $('#prediction-adv-status').innerHTML = status.msg;
   $('#prediction-adv-status').className = status.statusClass;
-  $('#prediction-adv-status').style.marginBottom = '15px';
 }
 
 let mnistIdx = 0;

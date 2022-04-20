@@ -62,10 +62,10 @@ export default {
       },
 	  {id: 'imagenet',
         options: [
-          {key: "Potato", value: '300'},
+          {key: "Tiger Beetle", value: '300'},
           {key: "American Lobster", value: '122'},
-          {key: "Church", value: '5'},
-          {key: "Do Not Enter", value: '55'},
+          {key: "Hen", value: '8'},
+          {key: "Packet", value: '692'},
         ]
 		}
     ],
