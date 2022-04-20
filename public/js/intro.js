@@ -171,7 +171,6 @@ async function loadImagenetModel() {
   if (imagenetResnet == undefined) { imagenetResnet = await tf.loadGraphModel('data/imagenet/resnet/model.json'); }
   if (imagenetXception == undefined) { imagenetXception = await tf.loadGraphModel('data/imagenet/xception/model.json'); }
   if (imagenetMobilenet == undefined) { imagenetMobilenet = await tf.loadGraphModel('data/imagenet/mobilenet/model.json'); }
-  //if (imagenetMobilenet == undefined) { imagenetMobilenet = await mobilenet.load({version: 2, alpha: 1.0}); }
   
   
 

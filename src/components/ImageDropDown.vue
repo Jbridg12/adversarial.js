@@ -36,7 +36,7 @@ export default {
           {key: "6", value: '6'},
           {key: "7", value: '7'},
           {key: "8", value: '8'},
-          {key: "9", value: '9'},
+          {key: "9", value: '9'}
         ]
       },
       {id: 'gtsrb',
@@ -44,20 +44,21 @@ export default {
           {key: "120km/hr", value: '0'},
           {key: "20km/hr", value: '1'},
           {key: "stop", value: '2'},
-          {key: "Do Not Enter", value: '3'},
+          {key: "Do Not Enter", value: '3'}
         ]
       },
       {id: 'cifar',
         options: [
-          {key: "Car", value: "0"},
-          {key: "Bird", value: "1"},
-          {key: "Cat", value: "2"},
-          {key: "Deer", value: "3"},
-          {key: "Dog", value: "4"},
-          {key: "Frog", value: "5"},
-          {key: "Horse", value: "6"},
-          {key: "Ship", value: "7"},
-          {key: "Truck", value: "8"},
+          {key: "Plane", value: "0"},
+          {key: "Car", value: "1"},
+          {key: "Bird", value: "2"},
+          {key: "Cat", value: "3"},
+          {key: "Deer", value: "4"},
+          {key: "Dog", value: "5"},
+          {key: "Frog", value: "6"},
+          {key: "Horse", value: "7"},
+          {key: "Ship", value: "8"},
+          {key: "Truck", value: "9"}
         ]
       },
 	  {id: 'imagenet',
@@ -65,7 +66,7 @@ export default {
           {key: "Tiger Beetle", value: '300'},
           {key: "American Lobster", value: '122'},
           {key: "Hen", value: '8'},
-          {key: "Packet", value: '692'},
+          {key: "Packet", value: '692'}
         ]
 		}
     ],
