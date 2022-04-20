@@ -533,11 +533,6 @@ async function generateAdv() {
     
   }
 
-  //$('#latency-msg').style.display = 'none';
-  //$('#generate-adv').innerText = 'Generate';
-  //$('#predict-adv').innerText = 'Run Neural Network';
-  //$('#predict-adv').disabled = false;
-
   async function _generateAdv(model, img, lbl, CLASS_NAMES, CONFIG) {
     // Generate adversarial example
     let targetLbl = tf.oneHot(targetLblIdx, lbl.shape[1]).reshape(lbl.shape);
