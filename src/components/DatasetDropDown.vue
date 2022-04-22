@@ -26,7 +26,8 @@ export default {
       { key: "MNIST (digit recognition)", value: 'mnist' },
       { key: "GTSRB (street sign recognition)", value: 'gtsrb' }, 
       { key: "CIFAR-10 (object recognition, small)", value: 'cifar' }, 
-      { key: "ImageNet (object recognition, large)", value: 'imagenet'}
+      { key: "ImageNet (object recognition, large)", value: 'imagenet'},
+      { key: "Face-Recognition (object recognition, large)", value: 'facerecognition'}
       ],
     key: "Select Dataset",
     value: "mnist",
@@ -46,7 +47,7 @@ background-color: #FFFFFF;
 color: #000000;
 font-family: "Raleway";
 font-size: calc(13px + .2vw);
-width: 25vw;
+width: 33vmin;
 height: 8vh;
 box-shadow: 1px 2px 4px #cecece;
 border-radius: .3em;
