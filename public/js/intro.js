@@ -262,6 +262,11 @@ export function attack(){
 		flag = true;
 	}
 }
+
+
+export function displayNoise(){
+	
+}
 //$('#generate-adv').addEventListener('click', removeBottomRightOverlay);
 
 
