@@ -37,9 +37,9 @@ export default {
   color: #000000;
   font-family: "Raleway-italic";
   font-weight: bold;
-  font-size: 20px;
-  width: 12em;
-  height: 2em;
+  font-size: calc(10px + .4vw);
+  width: 22vw;
+  height: 7vh;
   box-shadow: 1px 2px 4px #8c8c8c;
   border-radius: 0;
   border: 0;
