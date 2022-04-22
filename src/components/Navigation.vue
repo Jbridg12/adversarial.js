@@ -23,7 +23,7 @@ export default {
   align-content: center;
   align-items: center;
   width: 100%;
-  height: 12vw;
+  height: 12vmin;
   background-color: #D3DAE4;
 }
 
