@@ -2,14 +2,15 @@
   <div class="wrap-tutorial">
     <strong>Instructions for how to use the demo:</strong><br><br>
     <ol>
-      <li>Choose a model. The model chosen will...</li>
+      <li>Choose a model.</li>
       <li>Select a data set, which is used to aid in the classification of images.</li>
-      <li>Select an attack method, which will be applied and...</li>
-      <li>Finally, decide what the attack will change the image into</li>
+      <li>Then, click 'Run Neural Network'.
+      <li>Select an attack method.</li>
+      <li>Decide what the attack will change the image into.</li>
+      <li>Click 'Generate'</li>
     </ol>
 
     You can cycle through preset images using 'Next Image', or you can choose to upload your own image using 'Upload Image'.
-    <br>Once all options have been picked, click 'Run Neural Network' and then 'Generate' to run the attack.
     <br>Once the model has been ran, you can choose to 'Download Image' to save what you generated.
   </div>
 </template>
