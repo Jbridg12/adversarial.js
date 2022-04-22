@@ -46,11 +46,22 @@ background-color: #FFFFFF;
 color: #000000;
 font-family: "Raleway";
 font-size: 15px;
-width: 24em;
-height: 4em;
+width: 25vw;
+height: 10vh;
 box-shadow: 1px 2px 4px #cecece;
 border-radius: .3em;
 border: 0;
 text-align: left;
+}
+
+.dropdown-toggle::after {
+  float: right !important;
+  vertical-align: middle !important;
+}
+
+@media (max-width: 600px) {
+  .dropdown-button {
+    width: calc(10em + 20vw);
+  }
 }
 </style>

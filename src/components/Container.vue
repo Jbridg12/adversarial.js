@@ -7,7 +7,7 @@
       <div class="drop-down"><DatasetDropDown @changeDataset = "updateDropdowns"/></div>
       <div class="label">Select an Attack</div>
       <div class="drop-down"><AttackDropDown/></div>
-      <div class="label">Turn This Image Into a/an:</div>
+      <div class="label">Turn This Image Into A/An:</div>
       <div class="drop-down"><ImageDropDown :newDataset="newDataset"/></div>
     </div>
     <div class="imageContainer">
@@ -113,21 +113,32 @@ export default {
   padding-bottom: .5em;
 }
 
-.buttonDiv {
-  width:100%;
-  display:flex;
-}
-
 .drop-down {
   margin: auto;
   text-align: center;
 }
 
-@media (max-width: 600px) {
+.buttonDiv {
+  width:100%;
+  display:flex;
+}
 
-  .mainImage {
-    max-width: 100%;
-    height: auto;
+@media (max-width: 600px) {
+  .wrap {
+    margin-top: .5em;
+    padding: .1em;
+    flex-direction: column;
+  }
+
+  .options {
+    width: 100%;
+    padding: .5em;
+    text-align: center;    
+  }
+
+  .generate {
+    width: 50%;
+    margin:0em;
   }
 
   .label {
@@ -136,78 +147,24 @@ export default {
     padding-top: 25px;
   }
 
-  .wrap {
-    width: 85%;
-    height: fit-content;
-    margin: auto;
-    margin-top: .5em;
-    padding: .1em;
-    display: flex;
-    flex-direction: column;
-    flex-flow: row wrap;
-    text-align: center;
-  }
-
-  .options {
-    width: 100%;
-    height: fit-content;
-    padding: .5em;
-    text-align: center;
-    
-    
-  }
-
-  .button {
-  width:80%;
-  height:4em;
-  font-size:12px;
-  }
-
-  .buttondiv{
-    width:50%;
-    display:flex;
-
-  }
-  .generate {
-    width: 50%;
-    height: fit-content;
-    padding: 1em;
-    margin:0em;
-  }
-
   .imageContainer {
-    height: fit-content;
     width: 100%;
     height: 100%;
-    object-fit:contain;
-    background-color: rgb(255, 255, 255);
+    object-fit: contain;
     padding:1em
   }
 
   .upload {
     width: 50%;
-    height: fit-content;
-    padding: 1em;
   }
 
   .label {
-    text-align: left;
     padding-top: .8em;
     padding-bottom: .3em;
   }
 
-  .dropdown-button {
-    height:3em;
-  }
-
   .drop-down {
     width: 100%;
-    text-align: center;
-  }
-
-  .dropdown-button {
-    width: 70%;
-    text-align: center;
   }
 }
 </style>
