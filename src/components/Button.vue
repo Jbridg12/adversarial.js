@@ -43,5 +43,7 @@ export default {
   box-shadow: 1px 2px 4px #8c8c8c;
   border-radius: 0;
   border: 0;
+  white-space: normal;
+  word-wrap: break-word;
 }
 </style>

@@ -45,13 +45,15 @@ export default {
 background-color: #FFFFFF;
 color: #000000;
 font-family: "Raleway";
-font-size: 15px;
+font-size: calc(13px + .2vw);
 width: 25vw;
-height: 10vh;
+height: 8vh;
 box-shadow: 1px 2px 4px #cecece;
 border-radius: .3em;
 border: 0;
 text-align: left;
+white-space: normal;
+word-wrap: break-word;
 }
 
 .dropdown-toggle::after {
