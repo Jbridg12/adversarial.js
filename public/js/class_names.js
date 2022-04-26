@@ -11,6 +11,23 @@ export const MNIST_CLASSES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 export const CIFAR_CLASSES = ['Plane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck'];
 
 /************************************************************************
+* FASHION_MNIST Classes
+************************************************************************/
+
+export const FASHION_MNIST_CLASSES = {
+    0: "T-shirt/top",
+    1: "Trouser",
+    2: "Pullover",
+    3: "Dress",
+    4: "Coat",
+    5: "Sandal",
+    6: "Shirt",
+    7: "Sneaker",
+    8: "Bag",
+    9: "Ankle boot"
+};
+
+/************************************************************************
 * GTSRB Classes
 * Adapted from: ttps://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/signnames.csv
 ************************************************************************/
