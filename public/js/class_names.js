@@ -14,7 +14,7 @@ export const CIFAR_CLASSES = ['Plane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Fro
 * FASHION_MNIST Classes
 ************************************************************************/
 
-export const FASHION_MNIST_CLASSES = {
+export const FMNIST_CLASSES = {
     0: "T-shirt/top",
     1: "Trouser",
     2: "Pullover",

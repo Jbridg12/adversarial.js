@@ -1,5 +1,5 @@
 import {fgsmTargeted, bimTargeted, jsmaOnePixel, jsma, cw} from './adversarial.js';
-import {MNIST_CLASSES, GTSRB_CLASSES, CIFAR_CLASSES, IMAGENET_CLASSES} from './class_names.js';
+import {MNIST_CLASSES, FMNIST_CLASSES, CIFAR_CLASSES, IMAGENET_CLASSES} from './class_names.js';
 
 /* eslint-disable no-unused-vars */
 import * as tf from '../../node_modules/@tensorflow/tfjs';
@@ -15,9 +15,10 @@ const MNIST_CONFIGS = {
   'bimTargeted': {iters: 20},  // Targeted BIM works slightly better on MNIST with more iterations (pushes misclassification confidence up)
 };
 
-const GTSRB_CONFIGS = {
+const FMNIST_CONFIGS = {
+  'fgsmTargeted': {ε: 0.2},
   'bimTargeted': {iters: 50},  // Needs more iterations to work well
-  'jsmaOnePixel': {ε: 75},  // Works well with the same settings as CIFAR-10
+  //'jsmaOnePixel': {ε: 75},  // Works well with the same settings as CIFAR-10
 };
 
 const CIFAR_CONFIGS = {
@@ -63,8 +64,48 @@ let loadingCifarX = fetch(cifarXUrl).then(res => res.json()).then(arr => cifarX 
 let loadingCifarY = fetch(cifarYUrl).then(res => res.json()).then(arr => cifarY = tf.data.array(arr).batch(1));
 let loadingCifar = Promise.all([loadingCifarX, loadingCifarY]).then(() => tf.data.zip([cifarX, cifarY]).toArray()).then(ds => cifarDataset = ds.map(e => { return {xs: e[0], ys: e[1]}}));
 
-/****************************** Load GTSRB ******************************/
+/****************************** Load Fashion MNIST ******************************/
 
+let fmnistXUrls = [
+  '../data/fashion_mnist/0_t-shirt.png',
+  '../data/fashion_mnist/1_trouser.png',
+  '../data/fashion_mnist/2_pullover.png',
+  '../data/fashion_mnist/4_coat.png',
+  '../data/fashion_mnist/8_bag.png',
+  '../data/fashion_mnist/9_ankle_boot.png'
+]
+
+let fmnistYLbls = [0, 1, 2, 4, 8, 9]
+let fmnistY = fmnistYLbls.map(lbl => tf.oneHot(lbl, 10).reshape([1, 10]));
+
+// Utility function that loads an image in a given <img> tag and returns a Promise
+function loadImage(e, url) {
+  return new Promise((resolve) => {
+    e.addEventListener('load', () => resolve(e));
+    e.src = url;
+  });
+}
+
+// Load each image
+let loadingFmnistX = [];
+for (let i = 20; i < (fmnistXUrls.length + 20); i++) {
+  document.getElementsByClassName(i.toString()).forEach(e => {
+    let loadingImage = loadImage(e, fmnistXUrls[i]);
+    loadingFmnistX.push(loadingImage);
+  });
+}
+
+// Collect pixel data from each image
+let fmnistX = [];
+let loadedFmnistData = Promise.all(loadingFmnistX);
+loadedFmnistData.then(() => {
+  for (let i = 20; i < (fmnistXUrls.length + 20); i++) {
+    let img = document.getElementsByClassName(i.toString())[0];
+    fmnistX.push(tf.browser.fromPixels(img).div(255.0).reshape([1, 28, 28, 3]));
+  }
+});
+
+/*
 let gtsrbXUrl = 'data/gtsrb/gtsrb_sample_x.json';
 let gtsrbYUrl = 'data/gtsrb/gtsrb_sample_y.json';
 
@@ -73,7 +114,7 @@ let gtsrbX, gtsrbY, gtsrbDataset;
 let loadingGtsrbX = fetch(gtsrbXUrl).then(res => res.json()).then(arr => gtsrbX = tf.data.array(arr).batch(1));
 let loadingGtsrbY = fetch(gtsrbYUrl).then(res => res.json()).then(arr => gtsrbY = tf.data.array(arr).batch(1));
 let loadingGtsrb = Promise.all([loadingGtsrbX, loadingGtsrbY]).then(() => tf.data.zip([gtsrbX, gtsrbY]).toArray()).then(ds => gtsrbDataset = ds.map(e => { return {xs: e[0], ys: e[1]}}));
-
+*/
 /****************************** Load ImageNet ******************************/
 
 let imagenetXUrls = [
@@ -87,21 +128,12 @@ let imagenetXUrls = [
 let imagenetYLbls = [574, 217, 701, 0, 497, 566]
 let imagenetY = imagenetYLbls.map(lbl => tf.oneHot(lbl, 1000).reshape([1, 1000]));
 
-// Utility function that loads an image in a given <img> tag and returns a Promise
-function loadImage(e, url) {
-  return new Promise((resolve) => {
-    e.addEventListener('load', () => resolve(e));
-    e.src = url;
-  });
-}
-
 // Load each image
 let loadingImagenetX = [];
 for (let i = 0; i < imagenetXUrls.length; i++) {
   document.getElementsByClassName(i.toString()).forEach(e => {
     let loadingImage = loadImage(e, imagenetXUrls[i]);
     loadingImagenetX.push(loadingImage);
-    //drawImg(loadingImage, 'original');
   });
 }
 
@@ -155,10 +187,10 @@ let gtsrbXception;
 let gtsrbMobilenet;
 
 async function loadGtsrbModel() {
-  if (gtsrbVgg16 == undefined) { gtsrbVgg16 = await tf.loadGraphModel('data/gtsrb/vgg16/model.json'); }
-  if (gtsrbResnet == undefined) { gtsrbResnet = await tf.loadGraphModel('data/gtsrb/resnet/model.json'); }
-  if (gtsrbXception == undefined) { gtsrbXception = await tf.loadGraphModel('data/gtsrb/xception/model.json'); }
-  if (gtsrbMobilenet == undefined) { gtsrbMobilenet = await tf.loadGraphModel('data/gtsrb/mobilenet/model.json'); }
+  if (gtsrbVgg16 == undefined) { gtsrbVgg16 = await tf.loadGraphModel('data/fashion_mnist/vgg16/model.json'); }
+  if (gtsrbResnet == undefined) { gtsrbResnet = await tf.loadGraphModel('data/fashion_mnist/resnet/model.json'); }
+  if (gtsrbXception == undefined) { gtsrbXception = await tf.loadGraphModel('data/fashion_mnist/xception/model.json'); }
+  if (gtsrbMobilenet == undefined) { gtsrbMobilenet = await tf.loadGraphModel('data/fashion_mnist/mobilenet/model.json'); }
 }
 
 /****************************** Load ImageNet ******************************/
@@ -322,7 +354,6 @@ function showNextImage() {
  */
 function showImage() {
   let modelName = dataset;
-  //let modelName = $('#select-model').value;
   if (modelName === 'mnist') { showMnist(); }
   else if (modelName === 'cifar') { showCifar(); }
   else if (modelName === 'gtsrb') { showGtsrb(); }
@@ -374,15 +405,15 @@ async function predict() {
     _predict(model, cifarDataset[cifarIdx].xs, lblIdx, CIFAR_CLASSES);
   } else if (dataset === 'gtsrb') {
     await loadGtsrbModel();
-    await loadingGtsrb;
+    await loadingFmnistX;
     
     if (architecture === 'resnet') { model = gtsrbResnet; }
     else if (architecture === 'vgg16') {model = gtsrbVgg16; }
     else if (architecture === 'xception') {model = gtsrbXception; }
     else if (architecture === 'mobilenet') {model = gtsrbMobilenet; }
     
-    let lblIdx = gtsrbDataset[gtsrbIdx].ys.argMax(1).dataSync()[0];
-    _predict(model, tf.image.resizeNearestNeighbor(gtsrbDataset[gtsrbIdx].xs, [32,32]), lblIdx, GTSRB_CLASSES);
+    //let lblIdx = fmnistX[gtsrbIdx].ys.argMax(1).dataSync()[0];
+    _predict(model, tf.image.resizeNearestNeighbor(fmnistX[gtsrbIdx], [32,32]), fmnistYLbls[gtsrbIdx], FMNIST_CLASSES);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -478,14 +509,14 @@ async function generateAdv() {
     await _generateAdv(adv_model, cifarDataset[cifarIdx].xs, cifarDataset[cifarIdx].ys, CIFAR_CLASSES, CIFAR_CONFIGS[selectedAttack]);
   } else if (dataset === 'gtsrb') {
     await loadGtsrbModel();
-    await loadingGtsrb;
+    await loadingFmnistX;
     
     if (architecture === 'resnet') { adv_model = gtsrbResnet; }
     else if (architecture === 'vgg16') {adv_model = gtsrbVgg16; }
     else if (architecture === 'xception') {adv_model = gtsrbXception; }
     else if (architecture === 'mobilenet') {adv_model = gtsrbMobilenet; }
     
-    await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(gtsrbDataset[gtsrbIdx].xs, [32,32]), gtsrbDataset[gtsrbIdx].ys, GTSRB_CLASSES, GTSRB_CONFIGS[selectedAttack]);
+    await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(fmnistX[gtsrbIdx], [32,32]), fmnistY[gtsrbIdx], FMNIST_CLASSES, FMNIST_CONFIGS[selectedAttack]);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -627,7 +658,7 @@ async function resetAttack() {
 function resetAvailableAttacks() {
   const MNIST_TARGETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const CIFAR_TARGETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const GTSRB_TARGETS = [8, 0, 14, 17];
+  const FMNIST_TARGETS = [4, 3, 7, 2];
   const IMAGENET_TARGETS = [934, 413, 151];
 
   
@@ -639,8 +670,8 @@ function resetAvailableAttacks() {
     _resetAvailableAttacks(true, originalLbl, CIFAR_TARGETS, CIFAR_CLASSES);
    }
   else if (dataset === 'gtsrb') {
-    let originalLbl = gtsrbDataset[gtsrbIdx].ys.argMax(1).dataSync()[0];
-    _resetAvailableAttacks(false, originalLbl, GTSRB_TARGETS, GTSRB_CLASSES);
+    let originalLbl = fmnistYLbls[gtsrbIdx];
+    _resetAvailableAttacks(false, originalLbl, FMNIST_TARGETS, FMNIST_CLASSES);
   }
   else if (dataset === 'imagenet') {
     let originalLbl = imagenetYLbls[imagenetIdx];
@@ -807,11 +838,13 @@ async function showNextCifar() {
 
 let gtsrbIdx = 0;
 async function showGtsrb() {
-  await loadingGtsrb;
-  await drawImg(gtsrbDataset[gtsrbIdx].xs, 'original');
+  await loadingFmnistX;
+  console.log(fmnistX);
+  console.log(gtsrbIdx);
+  await drawImg(fmnistX[gtsrbIdx], 'original');
 }
 async function showNextGtsrb() {
-  gtsrbIdx = (gtsrbIdx + 1) % gtsrbDataset.length;
+  gtsrbIdx = (gtsrbIdx + 1) % fmnistX.length;
   await showGtsrb();
 }
 
