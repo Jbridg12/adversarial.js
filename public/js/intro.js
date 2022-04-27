@@ -17,14 +17,14 @@ const MNIST_CONFIGS = {
 
 const FMNIST_CONFIGS = {
   'fgsmTargeted': {ε: 0.2},
-  'bimTargeted': {iters: 50},  // Needs more iterations to work well
-  //'jsmaOnePixel': {ε: 75},  // Works well with the same settings as CIFAR-10
+  'bimTargeted': {iters: 20},  // Needs more iterations to work well
 };
 
 const CIFAR_CONFIGS = {
   'fgsm': {ε: 0.05},  // 0.1 L_inf perturbation is too visible in color
   'jsmaOnePixel': {ε: 75},  // JSMA one-pixel on CIFAR-10 requires more ~3x pixels than MNIST
   'jsma': {ε: 75},  // JSMA on CIFAR-10 also requires more ~3x pixels than MNIST
+  'bimTargeted': {iters: 50},  // Needs more iterations to work well
   'cw': {c: 1, λ: 0.05}  // Tried to minimize distortion, but not sure it worked
 };
 
@@ -32,6 +32,7 @@ const IMAGENET_CONFIGS = {
   'fgsm': {ε: 0.05},  // 0.1 L_inf perturbation is too visible in color
   'fgsmTargeted': {loss: 1},  // The 2nd loss function is too heavy for ImageNet
   'jsmaOnePixel': {ε: 75},  // This is unsuccessful. I estimate that it requires ~50x higher ε than CIFAR-10 to be successful on ImageNet, but that is too slow
+  'bimTargeted': {iters: 70},  // Needs more iterations to work well
   'cw': {κ: 5, c: 1, λ: 0.05}  // Generate higher confidence adversarial examples, and minimize distortion
 };
 
@@ -90,7 +91,7 @@ function loadImage(e, url) {
 let loadingFmnistX = [];
 for (let i = 20; i < (fmnistXUrls.length + 20); i++) {
   document.getElementsByClassName(i.toString()).forEach(e => {
-    let loadingImage = loadImage(e, fmnistXUrls[i]);
+    let loadingImage = loadImage(e, fmnistXUrls[i-20]);
     loadingFmnistX.push(loadingImage);
   });
 }
@@ -105,16 +106,6 @@ loadedFmnistData.then(() => {
   }
 });
 
-/*
-let gtsrbXUrl = 'data/gtsrb/gtsrb_sample_x.json';
-let gtsrbYUrl = 'data/gtsrb/gtsrb_sample_y.json';
-
-// Load data in form [{xs: x0_tensor, ys: y0_tensor}, {xs: x1_tensor, ys: y1_tensor}, ...]
-let gtsrbX, gtsrbY, gtsrbDataset;
-let loadingGtsrbX = fetch(gtsrbXUrl).then(res => res.json()).then(arr => gtsrbX = tf.data.array(arr).batch(1));
-let loadingGtsrbY = fetch(gtsrbYUrl).then(res => res.json()).then(arr => gtsrbY = tf.data.array(arr).batch(1));
-let loadingGtsrb = Promise.all([loadingGtsrbX, loadingGtsrbY]).then(() => tf.data.zip([gtsrbX, gtsrbY]).toArray()).then(ds => gtsrbDataset = ds.map(e => { return {xs: e[0], ys: e[1]}}));
-*/
 /****************************** Load ImageNet ******************************/
 
 let imagenetXUrls = [
@@ -178,19 +169,18 @@ async function loadCifarModel() {
   if (cifarMobilenet == undefined) { cifarMobilenet = await tf.loadGraphModel('data/cifar/mobilenet/model.json'); }
 }
 
-/****************************** Load GTSRB ******************************/
+/****************************** Load FMNIST ******************************/
 
-let gtsrbModel;
-let gtsrbVgg16;
-let gtsrbResnet;
-let gtsrbXception;
-let gtsrbMobilenet;
+let fmnistVgg16;
+let fmnistResnet;
+let fmnistXception;
+let fmnistMobilenet;
 
-async function loadGtsrbModel() {
-  if (gtsrbVgg16 == undefined) { gtsrbVgg16 = await tf.loadGraphModel('data/fashion_mnist/vgg16/model.json'); }
-  if (gtsrbResnet == undefined) { gtsrbResnet = await tf.loadGraphModel('data/fashion_mnist/resnet/model.json'); }
-  if (gtsrbXception == undefined) { gtsrbXception = await tf.loadGraphModel('data/fashion_mnist/xception/model.json'); }
-  if (gtsrbMobilenet == undefined) { gtsrbMobilenet = await tf.loadGraphModel('data/fashion_mnist/mobilenet/model.json'); }
+async function loadFmnistModel() {
+  if (fmnistVgg16 == undefined) { fmnistVgg16 = await tf.loadGraphModel('data/fashion_mnist/vgg16/model.json'); }
+  if (fmnistResnet == undefined) { fmnistResnet = await tf.loadGraphModel('data/fashion_mnist/resnet/model.json'); }
+  if (fmnistXception == undefined) { fmnistXception = await tf.loadGraphModel('data/fashion_mnist/xception/model.json'); }
+  if (fmnistMobilenet == undefined) { fmnistMobilenet = await tf.loadGraphModel('data/fashion_mnist/mobilenet/model.json'); }
 }
 
 /****************************** Load ImageNet ******************************/
@@ -283,15 +273,13 @@ export function attack(){
 	if(flag){
 		resetAdvPrediction();
 		console.log("Destroying all familiarity");
-		//document.getElementsByClassName('generate')[0].children[2].children[0]._value = "Processing"
 		generateAdv();
 		flag = false;
 	}
 	else{
 		console.log("Showing all familiarity");
-		predictAdv();
-		//document.getElementsByClassName('generate')[0].children[2].children[0]._value = "Generate"
 		flag = true;
+		predictAdv();
 	}
 }
 
@@ -345,7 +333,7 @@ function showNextImage() {
   //let modelName = $('#select-model').value;
   if (modelName === 'mnist') { showNextMnist(); }
   else if (modelName === 'cifar') { showNextCifar(); }
-  else if (modelName === 'gtsrb') { showNextGtsrb(); }
+  else if (modelName === 'fmnist') { showNextFmnist(); }
   else if (modelName === 'imagenet') { showNextImagenet(); }
 }
 
@@ -356,7 +344,7 @@ function showImage() {
   let modelName = dataset;
   if (modelName === 'mnist') { showMnist(); }
   else if (modelName === 'cifar') { showCifar(); }
-  else if (modelName === 'gtsrb') { showGtsrb(); }
+  else if (modelName === 'fmnist') { showFmnist(); }
   else if (modelName === 'imagenet') { showImagenet(); }
 }
 
@@ -403,17 +391,16 @@ async function predict() {
     
     let lblIdx = cifarDataset[cifarIdx].ys.argMax(1).dataSync()[0];
     _predict(model, cifarDataset[cifarIdx].xs, lblIdx, CIFAR_CLASSES);
-  } else if (dataset === 'gtsrb') {
-    await loadGtsrbModel();
+  } else if (dataset === 'fmnist') {
+    await loadFmnistModel();
     await loadingFmnistX;
     
-    if (architecture === 'resnet') { model = gtsrbResnet; }
-    else if (architecture === 'vgg16') {model = gtsrbVgg16; }
-    else if (architecture === 'xception') {model = gtsrbXception; }
-    else if (architecture === 'mobilenet') {model = gtsrbMobilenet; }
+    if (architecture === 'resnet') { model = fmnistResnet; }
+    else if (architecture === 'vgg16') {model = fmnistVgg16; }
+    else if (architecture === 'xception') {model = fmnistXception; }
+    else if (architecture === 'mobilenet') {model = fmnistMobilenet; }
     
-    //let lblIdx = fmnistX[gtsrbIdx].ys.argMax(1).dataSync()[0];
-    _predict(model, tf.image.resizeNearestNeighbor(fmnistX[gtsrbIdx], [32,32]), fmnistYLbls[gtsrbIdx], FMNIST_CLASSES);
+    _predict(model, tf.image.resizeNearestNeighbor(fmnistX[fmnistIdx], [32,32]), fmnistYLbls[fmnistIdx], FMNIST_CLASSES);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -455,10 +442,19 @@ async function predict() {
     console.log(pred.max().dataSync())
     let predLblIdx = pred.argMax(1).dataSync()[0];
     let predProb = pred.max().dataSync()[0];
-	if (dataset === 'upload') {uploadLblIdx = predLblIdx;}
+    if (dataset === 'upload') {uploadLblIdx = predLblIdx;}
 
     // Display prediction
-    let status = {msg: '✅ Prediction is Correct.', statusClass: 'status-green'};  // Predictions on the sample should always be correct
+    let status;
+    if(dataset === 'upload'){
+      status = "";
+    }
+    else if (predLblIdx === lblIdx) {
+      status = {msg: '✅ Prediction is Correct.', statusClass: 'status-green'};  // Predictions on the sample should always be correct
+    }
+    else {
+      status = {msg: '❌ Prediction is Incorrect.', statusClass: 'status-red'};  // Predictions on the sample should always be correct
+    }
     showPrediction(`"${CLASS_NAMES[predLblIdx]}"<br/>Probability: ${(predProb * 100).toFixed(2)}%`, status);
   }
  }
@@ -507,16 +503,16 @@ async function generateAdv() {
     else if (architecture === 'mobilenet') {adv_model = cifarMobilenet; }
     
     await _generateAdv(adv_model, cifarDataset[cifarIdx].xs, cifarDataset[cifarIdx].ys, CIFAR_CLASSES, CIFAR_CONFIGS[selectedAttack]);
-  } else if (dataset === 'gtsrb') {
-    await loadGtsrbModel();
+  } else if (dataset === 'fmnist') {
+    await loadFmnistModel();
     await loadingFmnistX;
     
-    if (architecture === 'resnet') { adv_model = gtsrbResnet; }
-    else if (architecture === 'vgg16') {adv_model = gtsrbVgg16; }
-    else if (architecture === 'xception') {adv_model = gtsrbXception; }
-    else if (architecture === 'mobilenet') {adv_model = gtsrbMobilenet; }
+    if (architecture === 'resnet') { adv_model = fmnistResnet; }
+    else if (architecture === 'vgg16') {adv_model = fmnistVgg16; }
+    else if (architecture === 'xception') {adv_model = fmnistXception; }
+    else if (architecture === 'mobilenet') {adv_model = fmnistMobilenet; }
     
-    await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(fmnistX[gtsrbIdx], [32,32]), fmnistY[gtsrbIdx], FMNIST_CLASSES, FMNIST_CONFIGS[selectedAttack]);
+    await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(fmnistX[fmnistIdx], [32,32]), fmnistY[fmnistIdx], FMNIST_CLASSES, FMNIST_CONFIGS[selectedAttack]);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -645,7 +641,7 @@ async function resetAttack() {
   $('#adversarial').style.display = 'block';
   $('#adversarial-noise').style.display = 'none';
 
-  if ($('#select-model').value === 'gtsrb' || $('#select-model').value === 'imagenet') {
+  if ($('#select-model').value === 'fmnist' || $('#select-model').value === 'imagenet') {
     $('#latency-msg').style.display = 'block';
   } else {
     $('#latency-msg').style.display = 'none';
@@ -669,8 +665,8 @@ function resetAvailableAttacks() {
     let originalLbl = cifarDataset[cifarIdx].ys.argMax(1).dataSync()[0];
     _resetAvailableAttacks(true, originalLbl, CIFAR_TARGETS, CIFAR_CLASSES);
    }
-  else if (dataset === 'gtsrb') {
-    let originalLbl = fmnistYLbls[gtsrbIdx];
+  else if (dataset === 'fmnist') {
+    let originalLbl = fmnistYLbls[fmnistIdx];
     _resetAvailableAttacks(false, originalLbl, FMNIST_TARGETS, FMNIST_CLASSES);
   }
   else if (dataset === 'imagenet') {
@@ -836,16 +832,14 @@ async function showNextCifar() {
   await showCifar();
 }
 
-let gtsrbIdx = 0;
-async function showGtsrb() {
+let fmnistIdx = 0;
+async function showFmnist() {
   await loadingFmnistX;
-  console.log(fmnistX);
-  console.log(gtsrbIdx);
-  await drawImg(fmnistX[gtsrbIdx], 'original');
+  await drawImg(fmnistX[fmnistIdx], 'original');
 }
-async function showNextGtsrb() {
-  gtsrbIdx = (gtsrbIdx + 1) % fmnistX.length;
-  await showGtsrb();
+async function showNextFmnist() {
+  fmnistIdx = (fmnistIdx + 1) % fmnistX.length;
+  await showFmnist();
 }
 
 let imagenetIdx = 0;

@@ -24,10 +24,9 @@ export default {
   data: () => ({
     options: [
       { key: "MNIST (digit recognition)", value: 'mnist' },
-      { key: "GTSRB (street sign recognition)", value: 'gtsrb' }, 
+      { key: "Fashion-MNIST (articles of clothing)", value: 'fmnist' }, 
       { key: "CIFAR-10 (object recognition, small)", value: 'cifar' }, 
-      { key: "ImageNet (object recognition, large)", value: 'imagenet'},
-      { key: "Face-Recognition (object recognition, large)", value: 'facerecognition'}
+      { key: "ImageNet (object recognition, large)", value: 'imagenet'}
       ],
     key: "Select Dataset",
     value: "mnist",
