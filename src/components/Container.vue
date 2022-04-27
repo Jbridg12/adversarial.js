@@ -16,9 +16,9 @@
     </div>
     <div class="buttonDiv">
       <div class="generate">
-        <Button value = "Run Neural Network" description="predict"/>
+        <Button value = "Run Neural Network" id = "predict" description="predict" disabled/>
         <br>
-        <Button value = "Generate" description="adv"/>
+        <Button value = "Generate" id = "adv" description="adv" disabled/>
       </div>
       <div class="upload">
         <Button value = "Upload Image" description="upload-image"/>

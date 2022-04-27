@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<input class="button" type="button" v-model=value @click = "onClick()">
+		<input class="button" type="button" v-model=value @click = "onClick()" disabled>
 		<div class="uploader">
 			<input id="fileid" type="file" accept="image/*" @change = "upload()" hidden/>
 		</div>
@@ -19,8 +19,24 @@ export default {
   methods: {
     onClick(){
 		if(this.description == "next-image"){nextImage()}
-        else if(this.description == "predict") {predictImg()}
-        else if(this.description == "adv"){attack()}
+        else if(this.description == "predict") {
+          let predict = document.getElementById('predict')
+          let adv = document.getElementById('adv')
+          predict.disabled = true
+          adv.disabled = true
+          predictImg()
+          predict.disabled = false
+          adv.disabled = false
+        }
+        else if(this.description == "adv"){
+          let predict = document.getElementById('predict')
+          let adv = document.getElementById('adv')
+          predict.disabled = true
+          adv.disabled = true
+          attack()
+          predict.disabled = false
+          adv.disabled = false
+        }
 		else if(this.description == "upload-image"){document.getElementById('fileid').click()}
 	},
 	upload(){
@@ -43,5 +59,9 @@ export default {
   box-shadow: 1px 2px 4px #8c8c8c;
   border-radius: 0;
   border: 0;
+}
+.button:disabled {
+  background: #999;
+  color: #555;
 }
 </style>
