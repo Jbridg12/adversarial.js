@@ -1,8 +1,6 @@
 <template>
   <div class="banner">
-    <div class="headers title">Adversarial Education</div>
-    <div class="headers page-title">-</div>
-    <div class="headers page-title">{{ pageTitle }}</div>
+    <div class="headers title">Adversarial Education - {{ pageTitle }}</div>
     <div class="links">
       <a href="../../public/index.html" class="nav">Home</a>
       <a href="https://github.com/Jbridg12/adversarial.js" target="_blank" class="nav">GitHub</a>
@@ -22,8 +20,10 @@ export default {
 <style>
 .banner {
   display: flex;
+  align-content: center;
+  align-items: center;
   width: 100%;
-  height: 5em;
+  height: 12vmin;
   background-color: #D3DAE4;
 }
 
@@ -32,37 +32,24 @@ export default {
   color: #333333;
   font-weight: bolder;
   font-family: "Raleway-italic";
-  font-size: 28pt;
-  margin-top: .5em;
+  font-size: calc(12px + 2vw);
+  margin-right: 1vw;
 }
 
 .title {
-  margin-left: 1em;
-}
-
-.page-title {
-  margin-left: .5em;
-  margin-top: .5em;
-}
-
-.title {
-  margin-left: 1em;
-}
-
-.page-title {
-  margin-left: 10px;
+  margin-left: 3vw;
 }
 
 .links {
   margin-left: auto;
-  margin-top: 2em;
 }
 
 a.nav {
   color: #333333;
   font-family: "Montserrat";
+  font-size: calc(12px + .2vw);
   text-decoration: none;
-  margin-right: 35px;
+  margin-right: 2vw;
   display: inline-block; 
 }
 
@@ -72,29 +59,6 @@ a.nav:hover {
 
 a.nav:active {
   font-weight: bold;
-}
-
-@media (max-width: 600px) {
-  .headers {
-    font-size: 12pt;
-  }
-
-  .links {
-    font-size: 12pt;
-    margin-top: 10px;
-  }
-
-  a.nav {
-    margin-right: 5px;
-  }
-
-
-  .banner {
-  display: flex;
-  width: 100%;
-  height: 4em;
-  background-color: #D3DAE4;
-}
 }
 </style>
 

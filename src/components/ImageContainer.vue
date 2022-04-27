@@ -1,6 +1,11 @@
 <template>
   <div>
+<<<<<<< HEAD
     <canvas id="original" class="tableimg" max-width="224" height="224" data-bs-toggle="modal" data-bs-target="#compareModal"></canvas>
+=======
+    <canvas id="original" class="tableimg" max-width="224" height="224"></canvas>
+    <img id = "frame" src="" class = "hideimage img-fluid" alt = "responsive" data-bs-toggle="modal" data-bs-target="#compareModal">
+>>>>>>> 259a16da0ca9156d0e3e75506ec6285ee2dd4cb4
     <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
@@ -47,4 +52,7 @@ export function updateImage() {
 </script>
 
 <style>
+.hideimage[src=""] {
+  display: none;
+}
 </style>

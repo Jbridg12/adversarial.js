@@ -140,10 +140,10 @@ let cifarResnet;
 let cifarXception;
 let cifarMobilenet;
 async function loadCifarModel() {
-  if (cifarVgg16 == undefined) { cifarVgg16 = await tf.loadLayersModel('data/cifar/vgg16/model.json'); }
-  if (cifarResnet == undefined) { cifarResnet = await tf.loadLayersModel('data/cifar/resnet/model.json'); }
-  //if (cifarXception == undefined) { cifarXception = await tf.loadLayersModel('data/cifar/xception/model.json'); }
-  if (cifarMobilenet == undefined) { cifarMobilenet = await tf.loadLayersModel('data/cifar/mobilenet/model.json'); }
+  if (cifarVgg16 == undefined) { cifarVgg16 = await tf.loadGraphModel('data/cifar/vgg16/model.json'); }
+  if (cifarResnet == undefined) { cifarResnet = await tf.loadGraphModel('data/cifar/resnet/model.json'); }
+  if (cifarXception == undefined) { cifarXception = await tf.loadGraphModel('data/cifar/xception/model.json'); }
+  if (cifarMobilenet == undefined) { cifarMobilenet = await tf.loadGraphModel('data/cifar/mobilenet/model.json'); }
 }
 
 /****************************** Load GTSRB ******************************/
@@ -155,8 +155,10 @@ let gtsrbXception;
 let gtsrbMobilenet;
 
 async function loadGtsrbModel() {
-  if (gtsrbModel !== undefined) { return; }
-  gtsrbModel = await tf.loadLayersModel('data/gtsrb/gtsrb_cnn.json');
+  if (gtsrbVgg16 == undefined) { gtsrbVgg16 = await tf.loadGraphModel('data/gtsrb/vgg16/model.json'); }
+  if (gtsrbResnet == undefined) { gtsrbResnet = await tf.loadGraphModel('data/gtsrb/resnet/model.json'); }
+  if (gtsrbXception == undefined) { gtsrbXception = await tf.loadGraphModel('data/gtsrb/xception/model.json'); }
+  if (gtsrbMobilenet == undefined) { gtsrbMobilenet = await tf.loadGraphModel('data/gtsrb/mobilenet/model.json'); }
 }
 
 /****************************** Load ImageNet ******************************/
@@ -171,26 +173,6 @@ async function loadImagenetModel() {
   if (imagenetResnet == undefined) { imagenetResnet = await tf.loadGraphModel('data/imagenet/resnet/model.json'); }
   if (imagenetXception == undefined) { imagenetXception = await tf.loadGraphModel('data/imagenet/xception/model.json'); }
   if (imagenetMobilenet == undefined) { imagenetMobilenet = await tf.loadGraphModel('data/imagenet/mobilenet/model.json'); }
-  
-  
-
-  /*         Old Code for Mobilenet Imagnet Classifier
-  if (imagenetModel !== undefined) { return; }
-  imagenetModel = await mobilenet.load({version: 2, alpha: 1.0});
-
-  // Monkey patch the mobilenet object to have a predict() method like a normal tf.LayersModel
-  imagenetModel.predict = function (img) {
-    return this.predictLogits(img).softmax();
-  }
-
-  // Also monkey patch the mobilenet object with a method to predict logits
-  imagenetModel.predictLogits = function (img) {
-    // Remove the first "background noise" logit
-    // Copied from: https://github.com/tensorflow/tfjs-models/blob/708e3911fb01d0dfe70448acc3e8ca736fae82d3/mobilenet/src/index.ts#L232
-    const logits1001 = this.model.predict(img);
-    return logits1001.slice([0, 1], [-1, 1000]);
-  }
-    */
 }
 
 /************************************************************************
@@ -279,6 +261,11 @@ export function attack(){
 		//document.getElementsByClassName('generate')[0].children[2].children[0]._value = "Generate"
 		flag = true;
 	}
+}
+
+
+export function displayNoise(){
+	
 }
 //$('#generate-adv').addEventListener('click', removeBottomRightOverlay);
 
@@ -395,7 +382,7 @@ async function predict() {
     else if (architecture === 'mobilenet') {model = gtsrbMobilenet; }
     
     let lblIdx = gtsrbDataset[gtsrbIdx].ys.argMax(1).dataSync()[0];
-    _predict(model, gtsrbDataset[gtsrbIdx].xs, lblIdx, GTSRB_CLASSES);
+    _predict(model, tf.image.resizeNearestNeighbor(gtsrbDataset[gtsrbIdx].xs, [32,32]), lblIdx, GTSRB_CLASSES);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -498,7 +485,7 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = gtsrbXception; }
     else if (architecture === 'mobilenet') {adv_model = gtsrbMobilenet; }
     
-    await _generateAdv(adv_model, gtsrbDataset[gtsrbIdx].xs, gtsrbDataset[gtsrbIdx].ys, GTSRB_CLASSES, GTSRB_CONFIGS[selectedAttack]);
+    await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(gtsrbDataset[gtsrbIdx].xs, [32,32]), gtsrbDataset[gtsrbIdx].ys, GTSRB_CLASSES, GTSRB_CONFIGS[selectedAttack]);
   } else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;

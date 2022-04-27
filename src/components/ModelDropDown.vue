@@ -44,11 +44,30 @@ export default {
 background-color: #FFFFFF;
 color: #000000;
 font-family: "Raleway";
-font-size: 15px;
-width: 24em;
-height: 4em;
+font-size: calc(13px + .2vw);
+width: 33vmin;
+height: 8vh;
 box-shadow: 1px 2px 4px #cecece;
 border-radius: .3em;
 text-align: left;
+white-space: normal;
+word-wrap: break-word;
+}
+
+.dropdown-toggle::after {
+  float: right !important;
+  vertical-align: middle !important;
+}
+
+@media (max-width: 280px) {
+  .dropdown-button {
+    font-size: 5vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .dropdown-button {
+    width: calc(10em + 20vw);
+  }
 }
 </style>
