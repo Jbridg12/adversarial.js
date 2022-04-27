@@ -39,12 +39,12 @@ export default {
           {key: "9", value: '9'}
         ]
       },
-      {id: 'gtsrb',
+      {id: 'fmnist',
         options: [
-          {key: "120km/hr", value: '0'},
-          {key: "20km/hr", value: '1'},
-          {key: "stop", value: '2'},
-          {key: "Do Not Enter", value: '3'}
+          {key: "Sandal", value: '5'},
+          {key: "Dress", value: '3'},
+          {key: "Sneaker", value: '7'},
+          {key: "Shirt", value: '6'}
         ]
       },
       {id: 'cifar',
@@ -96,7 +96,7 @@ background-color: #FFFFFF;
 color: #000000;
 font-family: "Raleway";
 font-size: calc(13px + .2vw);
-width: 25vw;
+width: 33vmin;
 height: 8vh;
 box-shadow: 1px 2px 4px #cecece;
 border-radius: .3em;
