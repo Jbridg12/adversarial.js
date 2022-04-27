@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="original" class="tableimg" max-width="224" height="224"></canvas>
+    <canvas id="original" class="tableimg" max-width="224" height="224" data-bs-toggle="modal" data-bs-target="#compareModal"></canvas>
     <img id = "frame" src="" class = "hideimage img-fluid" alt = "responsive" data-bs-toggle="modal" data-bs-target="#compareModal">
     <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
@@ -12,10 +12,16 @@
           <div class="modal-body">
             <div class = "row g-1">
               <div class = "col">
-              <img id = "frame2" src="" class = "img-fluid">
+              <p>Original</p>
+              <canvas id="og" class="tableimg" max-width="224" height="224"></canvas>
               </div>
               <div class = "col">
-              <img id = "frame3" src="" class = "img-fluid">
+              <p>Noise</p>
+              <canvas id="adversarial-noise" class="tableimg" max-width="224" height="224"></canvas>
+              </div>
+              <div class = "col">
+              <p>Adversarial Image</p>
+              <canvas id="adversarial" class="tableimg" max-width="224" height="224"></canvas>
               </div>
             </div>
           </div>

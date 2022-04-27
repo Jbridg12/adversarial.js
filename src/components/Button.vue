@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<input class="button" type="button" v-model=value @click = "onClick()" disabled>
+		<input class="button" type="button" v-model=value @click = "onClick()">
 		<div class="uploader">
 			<input id="fileid" type="file" accept="image/*" @change = "upload()" hidden/>
 		</div>
@@ -63,6 +63,8 @@ export default {
   word-wrap: break-word;
 }
 .button:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
   background: #999;
   color: #555;
 }

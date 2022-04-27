@@ -323,6 +323,7 @@ async function getImg(){
 	});
 	
 	drawImg(loadedUpload, "original");
+  drawImg(loadedUpload, "og");
 }
 
 /**
@@ -816,6 +817,7 @@ let mnistIdx = 0;
 async function showMnist() {
   await loadingMnist;
   await drawImg(mnistDataset[mnistIdx].xs, 'original');
+  await drawImg(mnistDataset[mnistIdx].xs, 'og');
 }
 async function showNextMnist() {
   mnistIdx = (mnistIdx + 1) % mnistDataset.length;
@@ -826,6 +828,7 @@ let cifarIdx = 0;
 async function showCifar() {
   await loadingCifar;
   await drawImg(cifarDataset[cifarIdx].xs, 'original');
+  await drawImg(cifarDataset[cifarIdx].xs, 'og');
 }
 async function showNextCifar() {
   cifarIdx = (cifarIdx + 1) % cifarDataset.length;
@@ -836,6 +839,7 @@ let fmnistIdx = 0;
 async function showFmnist() {
   await loadingFmnistX;
   await drawImg(fmnistX[fmnistIdx], 'original');
+  await drawImg(fmnistX[fmnistIdx], 'og');
 }
 async function showNextFmnist() {
   fmnistIdx = (fmnistIdx + 1) % fmnistX.length;
@@ -846,6 +850,7 @@ let imagenetIdx = 0;
 async function showImagenet() {
   await loadingImagenetX;
   await drawImg(imagenetX[imagenetIdx], 'original');
+  await drawImg(imagenetX[imagenetIdx], 'og');
 }
 async function showNextImagenet() {
   imagenetIdx = (imagenetIdx + 1) % imagenetX.length;
