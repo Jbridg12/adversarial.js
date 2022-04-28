@@ -13,41 +13,41 @@ export default {
   name: 'Button',
   props: {
     value: String,
-	description: String
+    description: String
   },
   methods: {
     onClick(){
-		if(this.description == "next-image"){nextImage()}
-        else if(this.description == "predict") {
-          let predict = document.getElementById('predict')
-          let adv = document.getElementById('adv')
-          predict.disabled = true
-          adv.disabled = true
-          predictImg()
-          predict.disabled = false
-          adv.disabled = false
-        }
-        else if(this.description == "adv"){
-          let predict = document.getElementById('predict')
-          let adv = document.getElementById('adv')
-          predict.disabled = true
-          adv.disabled = true
-          attack()
-          predict.disabled = false
-          adv.disabled = false
-        }
-		    else if(this.description == "upload-image"){
-          let tmp = document.getElementById('select-dataset')
-          tmp.innerHTML = "ImageNet (object recognition, large)"
-          changeDataset('imagenet')
-          this.$emit('changeDataset', 'imagenet')
-          this.$emit('uploadedImage', 'imagenet')
-          document.getElementById('fileid').click()
-        }
-	  },
-	upload(){
-		uploadImage()
-	  }
+      if(this.description == "next-image"){nextImage()}
+      else if(this.description == "predict") {
+        let predict = document.getElementById('predict')
+        let adv = document.getElementById('adv')
+        predict.disabled = true
+        adv.disabled = true
+        predictImg()
+        predict.disabled = false
+        adv.disabled = false
+      }
+      else if(this.description == "adv"){
+        let predict = document.getElementById('predict')
+        let adv = document.getElementById('adv')
+        predict.disabled = true
+        adv.disabled = true
+        attack()
+        predict.disabled = false
+        adv.disabled = false
+      }
+      else if(this.description == "upload-image"){
+        let tmp = document.getElementById('select-dataset')
+        tmp.innerHTML = "ImageNet (object recognition, large)"
+        changeDataset('imagenet')
+        this.$emit('changeDataset', 'imagenet')
+        this.$emit('uploadedImage', 'imagenet')
+        document.getElementById('fileid').click()
+      }
+    },
+    upload(){
+      uploadImage()
+    }
   },
   data() {
     return {
@@ -58,7 +58,6 @@ export default {
   mounted: function() {
     this.$root.$on('dropdownChange', (text) => {
       this.checks[text] = true
-
     })
   },
   computed: {
