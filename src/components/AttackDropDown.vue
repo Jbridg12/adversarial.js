@@ -1,11 +1,11 @@
 <template>
-  <div class="dropdown">
-        <button class="dropdown-button dropdown-toggle" type="button" id="select-attack" data-bs-toggle="dropdown" aria-expanded="false" value="">
+  <div v-if="attackDropdown">
+    <button class="dropdown-button dropdown-toggle" type="button" id="select-attack" data-bs-toggle="dropdown" aria-expanded="false" value="">
       {{key}}
     </button>
       <ul class="dropdown-menu" aria-labelledby="select-attack">
-        <li v-for="option in options" :key="option.key">
-          <a class="dropdown-item" @click="onClick(option.value,); key = option.key; value = option.value" href="javascript: void(0)">{{option.key}}</a>
+        <li v-for="option in attackDropdown.options" :key="option.key">
+          <a class="dropdown-item" @click="onClick(option.value); key = option.key; value = option.value" href="javascript: void(0)">{{option.key}}</a>
         </li>
       </ul>
   </div>
@@ -19,23 +19,58 @@ export default {
   name: 'AttackDropDown',
   id: 'select-attack',
   props: {
-    description: String
+    description: String,
+    newDataset: String,
   },
   data: () => ({
-    options: [
-      { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
-      { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
-      { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
-      { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
-      ],
-	key: "Select Attack",
-	value: ""
+    datasets: [
+      {id: 'mnist', 
+        options: [
+          { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
+          { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
+          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+        ]
+      },
+      {id: 'fmnist',
+        options: [
+          { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
+          { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
+          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+        ]
+      },
+      {id: 'cifar',
+        options: [
+          { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
+          { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
+          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+        ]
+      },
+      {id: 'imagenet',
+        options: [
+          { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
+          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+        ]
+      }
+    ],
+    key: "Select Attack",
+    value: ""
   }),
   methods: {
 	onClick(value){
     this.$root.$emit('dropdownChange', 0)
 		changeAttack(value)
 	}
+  },
+  computed: {
+    attackDropdown() {
+      return (this.newDataset)
+        ? this.datasets.find(x => x.id === this.newDataset)
+        : this.datasets.find(x => x.id === "mnist")
+    }
   }
 }
 </script>

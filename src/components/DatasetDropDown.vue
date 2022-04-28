@@ -16,7 +16,7 @@ import {changeDataset} from "../../public/js/intro.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 export default {
-  name: 'ModelDropDown',
+  name: 'DatasetDropDown',
   id: 'select-dataset',
   props: {
     description: String,
