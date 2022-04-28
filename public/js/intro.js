@@ -24,7 +24,6 @@ const CIFAR_CONFIGS = {
   'fgsm': {ε: 0.05},  // 0.1 L_inf perturbation is too visible in color
   'jsmaOnePixel': {ε: 75},  // JSMA one-pixel on CIFAR-10 requires more ~3x pixels than MNIST
   'jsma': {ε: 75},  // JSMA on CIFAR-10 also requires more ~3x pixels than MNIST
-  'bimTargeted': {iters: 50},  // Needs more iterations to work well
   'cw': {c: 1, λ: 0.05}  // Tried to minimize distortion, but not sure it worked
 };
 
@@ -32,7 +31,6 @@ const IMAGENET_CONFIGS = {
   'fgsm': {ε: 0.05},  // 0.1 L_inf perturbation is too visible in color
   'fgsmTargeted': {loss: 1},  // The 2nd loss function is too heavy for ImageNet
   'jsmaOnePixel': {ε: 75},  // This is unsuccessful. I estimate that it requires ~50x higher ε than CIFAR-10 to be successful on ImageNet, but that is too slow
-  'bimTargeted': {iters: 70},  // Needs more iterations to work well
   'cw': {κ: 5, c: 1, λ: 0.05}  // Generate higher confidence adversarial examples, and minimize distortion
 };
 
@@ -270,7 +268,11 @@ export function changeAttack(attack){
 let flag = true; // They have to press button twice, once to genereate, once to predict
 
 export function attack(){
-	if(flag){
+  resetAdvPrediction();
+	console.log("Destroying all familiarity");
+	generateAdv();
+	/*
+  if(flag){
 		resetAdvPrediction();
 		console.log("Destroying all familiarity");
 		generateAdv();
@@ -280,7 +282,7 @@ export function attack(){
 		console.log("Showing all familiarity");
 		flag = true;
 		predictAdv();
-	}
+	}*/
 }
 
 
@@ -448,7 +450,7 @@ async function predict() {
     // Display prediction
     let status;
     if(dataset === 'upload'){
-      status = "";
+      status = {msg: '', statusClass: 'status-green'};
     }
     else if (predLblIdx === lblIdx) {
       status = {msg: '✅ Prediction is Correct.', statusClass: 'status-green'};  // Predictions on the sample should always be correct
@@ -571,12 +573,12 @@ async function generateAdv() {
     } else {
       advStatus = {msg: '✅ Prediction is still correct. Attack failed.', statusClass: 'status-green'};
     }
-
-	console.log(advStatus);
+    
+    showAdvPrediction(advPrediction, advStatus);
+    console.log(advStatus);
     // Also compute and draw the adversarial noise (hidden until the user clicks on it)
     let noise = tf.sub(aimg, img).add(0.5).clipByValue(0, 1);  // [Szegedy 14] Intriguing properties of neural networks
-    drawImg(noise, 'adversarial-noise');
-	console.log("Adversified");
+    //drawImg(noise, 'adversarial-noise');
 	//document.getElementsByClassName('generate')[0].children[2].__vue__._props.value = "Print Results"
   }
 }
@@ -586,7 +588,6 @@ async function generateAdv() {
  * (This function just renders the status we've already computed in generateAdv())
  */
 function predictAdv() {
-  //$('#predict-adv').disabled = true;
   showAdvPrediction(advPrediction, advStatus);
 }
 
