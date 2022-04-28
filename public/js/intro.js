@@ -3,7 +3,6 @@ import {MNIST_CLASSES, FMNIST_CLASSES, CIFAR_CLASSES, IMAGENET_CLASSES} from './
 
 /* eslint-disable no-unused-vars */
 import * as tf from '../../node_modules/@tensorflow/tfjs';
-import * as mobilenet from '../../node_modules/@tensorflow-models/mobilenet';
 /************************************************************************
 * Global constants
 ************************************************************************/
@@ -209,7 +208,6 @@ export function changeArchitecture(arch){
 	showImage();
 	resetPrediction();
 	resetAdvPrediction();
-	//resetAttack();
 }
 
 // Dataset selection dropdown
@@ -219,7 +217,6 @@ export function changeDataset(ds){
 	showImage();
 	resetPrediction();
 	resetAdvPrediction();
-	//resetAttack();
 }
 
 // Next image button
@@ -228,7 +225,6 @@ export function nextImage(){
 	showNextImage();
 	resetPrediction();
 	resetAdvPrediction();
-	//resetAttack();
 }
 
 // Upload image button
@@ -246,7 +242,6 @@ export function uploadImage(){
 export function predictImg(){
     console.log("Releasing private data");
     predict();
-    //removeTopRightOverlay();
 }
 
 // Target label dropdown
@@ -463,12 +458,13 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = mnistXception; }
     else if (architecture === 'mobilenet') {adv_model = mnistMobilenet; }
 	
-	let img = mnistDataset[mnistIdx].xs;
+	  let img = mnistDataset[mnistIdx].xs;
     let resizedImg = tf.image.resizeNearestNeighbor(img.reshape([1, 28, 28, 1]), [32, 32]);
     let RGB = tf.image.grayscaleToRGB(resizedImg);
     
     await _generateAdv(adv_model, RGB, mnistDataset[mnistIdx].ys, MNIST_CLASSES, MNIST_CONFIGS[attack.name]);
-  } else if (dataset === 'cifar') {
+  } 
+  else if (dataset === 'cifar') {
     await loadCifarModel();
     await loadingCifar;
     
@@ -478,7 +474,8 @@ async function generateAdv() {
     else if (architecture === 'mobilenet') {adv_model = cifarMobilenet; }
     
     await _generateAdv(adv_model, cifarDataset[cifarIdx].xs, cifarDataset[cifarIdx].ys, CIFAR_CLASSES, CIFAR_CONFIGS[selectedAttack]);
-  } else if (dataset === 'fmnist') {
+  } 
+  else if (dataset === 'fmnist') {
     await loadFmnistModel();
     await loadingFmnistX;
     
@@ -488,7 +485,8 @@ async function generateAdv() {
     else if (architecture === 'mobilenet') {adv_model = fmnistMobilenet; }
     
     await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(fmnistX[fmnistIdx], [32,32]), fmnistY[fmnistIdx], FMNIST_CLASSES, FMNIST_CONFIGS[selectedAttack]);
-  } else if (dataset === 'imagenet') {
+  } 
+  else if (dataset === 'imagenet') {
     await loadImagenetModel();
     await loadedImagenetData;
     
@@ -497,12 +495,12 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = imagenetXception; }
     else if (architecture === 'mobilenet') {adv_model = imagenetMobilenet; }
     
-	if (architecture === 'xception') { 
-		await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(imagenetX[imagenetIdx], [299,299]), imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
-	}
-	else{
-		await _generateAdv(adv_model, imagenetX[imagenetIdx], imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
-	}
+    if (architecture === 'xception') { 
+      await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(imagenetX[imagenetIdx], [299,299]), imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+    }
+    else {
+      await _generateAdv(adv_model, imagenetX[imagenetIdx], imagenetY[imagenetIdx], IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+    }
   } else if (dataset === 'upload') {
     await loadImagenetModel();
     await loadedImagenetData;
@@ -512,13 +510,12 @@ async function generateAdv() {
     else if (architecture === 'xception') {adv_model = imagenetXception; }
     else if (architecture === 'mobilenet') {adv_model = imagenetMobilenet; }
     
-	if (architecture === 'xception') { 
-		await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(loadedUpload, [299,299]), tf.oneHot(uploadLblIdx, 1000).reshape([1, 1000]), IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
-	}
-	else{
-		await _generateAdv(adv_model, loadedUpload, tf.oneHot(uploadLblIdx, 1000).reshape([1, 1000]), IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
-	}
-    
+    if (architecture === 'xception') { 
+      await _generateAdv(adv_model, tf.image.resizeNearestNeighbor(loadedUpload, [299,299]), tf.oneHot(uploadLblIdx, 1000).reshape([1, 1000]), IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+    }
+    else{
+      await _generateAdv(adv_model, loadedUpload, tf.oneHot(uploadLblIdx, 1000).reshape([1, 1000]), IMAGENET_CLASSES, IMAGENET_CONFIGS[selectedAttack]);
+    }
   }
 
   async function _generateAdv(model, img, lbl, CLASS_NAMES, CONFIG) {
@@ -585,58 +582,6 @@ function resetOnNewImage() {
   $('#prediction-status').innerHTML = '';
   $('#prediction-status').className = '';
   $('#prediction-status').style.marginBottom = '9px';
-  //resetAttack();
-  //resetAvailableAttacks();
-}
-
-/**
- * Reset attack UI when a new target label, attack, or image is selected
- */
-async function resetAttack() {
-  $('#generate-adv').disabled = false;
-  $('#predict-adv').disabled = true;
-  $('#predict-adv').innerText = 'Click "Generate" First';
-  $('#difference').style.display = 'none';
-  $('#difference-noise').style.display = 'none';
-  $('#prediction-adv').style.display = 'none';
-  $('#prediction-adv-status').innerHTML = '';
-  $('#prediction-adv-status').className = '';
-  $('#prediction-adv-status').style.marginBottom = '9px';
-  await drawImg(tf.ones([1, 224, 224, 1]), 'adversarial');
-  await drawImg(tf.ones([1, 224, 224, 1]), 'adversarial-noise');
-  $('#adversarial').style.display = 'block';
-  $('#adversarial-noise').style.display = 'none';
-
-  if ($('#select-model').value === 'fmnist' || $('#select-model').value === 'imagenet') {
-    $('#latency-msg').style.display = 'block';
-  } else {
-    $('#latency-msg').style.display = 'none';
-  }
-}
-
-
-/**
- * Removes the overlay on the left half of the dashboard when the user selects a model
- */
-function removeLeftOverlay() {
-  $('#original-image-overlay').style.display = 'none';
-  $('#original-canvas-overlay').style.display = 'none';
-  $('#original-prediction-overlay').style.display = 'none';
-}
-
-/**
- * Removes the overlay on the top right of the dashboard when the user makes their first prediction
- */
-function removeTopRightOverlay() {
-  $('#adversarial-image-overlay').style.display = 'none';
-  $('#adversarial-canvas-overlay').style.display = 'none';
-}
-
-/**
- * Removes the overlay on the bottom right of the dashboard when the user generates an adversarial example
- */
-function removeBottomRightOverlay() {
-  $('#adversarial-prediction-overlay').style.display = 'none';
 }
 
 /**
