@@ -5,7 +5,7 @@
     </button>
       <ul class="dropdown-menu" aria-labelledby="select-attack">
         <li v-for="option in options" :key="option.key">
-          <a class="dropdown-item" @click="onClick(option.value); key = option.key; value = option.value" href="javascript: void(0)">{{option.key}}</a>
+          <a class="dropdown-item" @click="onClick(option.value,); key = option.key; value = option.value" href="javascript: void(0)">{{option.key}}</a>
         </li>
       </ul>
   </div>
@@ -33,6 +33,7 @@ export default {
   }),
   methods: {
 	onClick(value){
+    this.$root.$emit('dropdownChange', 0)
 		changeAttack(value)
 	}
   }
