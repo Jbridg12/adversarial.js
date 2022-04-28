@@ -42,6 +42,7 @@ export default {
         changeDataset('imagenet')
         this.$emit('changeDataset', 'imagenet')
         this.$emit('uploadedImage', 'imagenet')
+        this.$root.$emit('dropdownChange', 1)
         document.getElementById('fileid').click()
       }
     },
@@ -51,7 +52,7 @@ export default {
   },
   data() {
     return {
-      checks: {0:false,1:false,2:false,3:false
+        checks: {0:false,1:false,2:false,3:false
       }
     } 
   },
