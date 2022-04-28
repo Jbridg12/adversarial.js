@@ -450,7 +450,7 @@ async function predict() {
     // Display prediction
     let status;
     if(dataset === 'upload'){
-      status = {msg: '', statusClass: 'status-green'};
+      status = {msg: 'You tell me!', statusClass: 'status-green'};
     }
     else if (predLblIdx === lblIdx) {
       status = {msg: '✅ Prediction is Correct.', statusClass: 'status-green'};  // Predictions on the sample should always be correct
