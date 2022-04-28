@@ -33,6 +33,7 @@ export default {
   }),
   methods: {
 	onClick(value){
+    this.$root.$emit('dropdownChange', 3)
 		changeArchitecture(value)
 	}
   }
