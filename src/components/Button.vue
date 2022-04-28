@@ -42,6 +42,7 @@ export default {
         changeDataset('imagenet')
         this.$emit('changeDataset', 'imagenet')
         this.$emit('uploadedImage', 'imagenet')
+        this.$root.$emit('dropdownChange', 1)
         document.getElementById('fileid').click()
       }
     },
@@ -51,7 +52,7 @@ export default {
   },
   data() {
     return {
-      checks: {0:false,1:false,2:false,3:false
+        checks: {0:false,1:false,2:false,3:false
       }
     } 
   },
@@ -70,6 +71,10 @@ export default {
       }
       if(this.description == 'next-image' || this.description == 'upload-image') {
         return false
+      }
+      else if (this.description == 'predict') {
+        if (this.checks[3] == true && this.checks[1] == true) return false
+        else return returnValue
       }
       else{
         return returnValue
