@@ -44,7 +44,7 @@ export default {
   data() {
     return {
         checks: {0:false,1:false,2:false,3:false},
-        conditions: {0:false, 1:false, 2:false, 3:false}, //i plan to use 1 for the generate button after RNN and 2 and 3 for the generate button after image uploaded 
+        conditions: {0:false, 1:false, 2:false, 3:false},
     } 
   },
   mounted: function() {

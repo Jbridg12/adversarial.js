@@ -34,20 +34,10 @@
 </template>
 
 <script>
-//notes: use getImg(), loadImage(), and drawImg() in intro.js as a base for scripts
 export default {
   name: 'ImageContainer',
   methods: {
   }
-}
-export function updateImage() {
-  var frame = document.getElementById("frame")
-  var frame2 = document.getElementById("frame2")
-  var frame3 = document.getElementById("frame3")
-  var source = document.getElementById("fileid")
-  frame.src = URL.createObjectURL(source.files[0])
-  frame2.src = frame.src
-  frame3.src = frame.src
 }
 </script>
 
