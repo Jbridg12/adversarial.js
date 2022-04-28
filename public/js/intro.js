@@ -457,8 +457,8 @@ async function generateAdv() {
     else if (architecture === 'vgg16') {adv_model = mnistVgg16; }
     else if (architecture === 'xception') {adv_model = mnistXception; }
     else if (architecture === 'mobilenet') {adv_model = mnistMobilenet; }
-	
-	  let img = mnistDataset[mnistIdx].xs;
+    
+    let img = mnistDataset[mnistIdx].xs;
     let resizedImg = tf.image.resizeNearestNeighbor(img.reshape([1, 28, 28, 1]), [32, 32]);
     let RGB = tf.image.grayscaleToRGB(resizedImg);
     
