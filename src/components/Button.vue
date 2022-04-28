@@ -72,6 +72,10 @@ export default {
       if(this.description == 'next-image' || this.description == 'upload-image') {
         return false
       }
+      else if (this.description == 'predict') {
+        if (this.checks[3] == true && this.checks[1] == true) return false
+        else return returnValue
+      }
       else{
         return returnValue
       }
