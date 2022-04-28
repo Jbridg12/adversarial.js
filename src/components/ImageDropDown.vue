@@ -12,7 +12,6 @@
 </template>
   
 <script>
-/* eslint-disable no-mixed-spaces-and-tabs */
 import {changeTarget} from "../../public/js/intro.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
@@ -61,14 +60,14 @@ export default {
           {key: "Truck", value: "9"}
         ]
       },
-	  {id: 'imagenet',
+    {id: 'imagenet',
         options: [
           {key: "Tiger Beetle", value: '300'},
           {key: "American Lobster", value: '122'},
           {key: "Hen", value: '8'},
           {key: "Packet", value: '692'}
         ]
-		  }
+      }
     ],
     key: "Select Target",
     value: "0",
@@ -95,7 +94,6 @@ export default {
     })
   }
 }  
-/* eslint-enable no-mixed-spaces-and-tabs */
 </script>
 
 
