@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<input class="button" type="button" v-model=value @click = "onClick()">
+		<input class="button" type="button" v-model=value @click = "onClick()" :disabled="isDisabled">
 		<div class="uploader">
 			<input id="fileid" type="file" accept="image/*" @change = "upload()" hidden/>
 		</div>
@@ -36,19 +36,49 @@ export default {
           predict.disabled = false
           adv.disabled = false
         }
-		else if(this.description == "upload-image"){
-        let tmp = document.getElementById('select-dataset')
-        tmp.innerHTML = "ImageNet (object recognition, large)"
-        changeDataset('imagenet')
-        this.$emit('changeDataset', 'imagenet')
-        this.$emit('uploadedImage', 'imagenet')
-        document.getElementById('fileid').click()
-      }
-	},
+		    else if(this.description == "upload-image"){
+          let tmp = document.getElementById('select-dataset')
+          tmp.innerHTML = "ImageNet (object recognition, large)"
+          changeDataset('imagenet')
+          this.$emit('changeDataset', 'imagenet')
+          this.$emit('uploadedImage', 'imagenet')
+          document.getElementById('fileid').click()
+        }
+	  },
 	upload(){
 		uploadImage()
-	}
+	  }
+  },
+  data() {
+    return {
+      checks: {0:false,1:false,2:false,3:false
+      }
+    } 
+  },
+  mounted: function() {
+    this.$root.$on('dropdownChange', (text) => {
+      this.checks[text] = true
+
+    })
+  },
+  computed: {
+    isDisabled() {
+      let returnValue = false
+      for(var key in this.checks){
+        if(this.checks[key] == false) {
+          returnValue = true
+        }
+      }
+      if(this.description == 'next-image' || this.description == 'upload-image') {
+        return false
+      }
+      else{
+        return returnValue
+      }
+      
+    }
   }
+  
 }
 </script>
 

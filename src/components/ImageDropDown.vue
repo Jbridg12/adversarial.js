@@ -75,6 +75,7 @@ export default {
   }),
   methods: {
 	onClick(value){
+    this.$root.$emit('dropdownChange', 2)
 		changeTarget(value)
 	}
   },
