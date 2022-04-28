@@ -1,9 +1,9 @@
 <template>
   <div class="dropdown">
-    <button class="dropdown-button dropdown-toggle" type="button" id="select-model" data-bs-toggle="dropdown" aria-expanded="false">
+    <button class="dropdown-button dropdown-toggle" type="button" id="select-dataset" data-bs-toggle="dropdown" aria-expanded="false">
       {{key}}
     </button>
-      <ul class="dropdown-menu" aria-labelledby="select-model">
+      <ul class="dropdown-menu" aria-labelledby="select-dataset">
         <li v-for="option in options" :key="option.key" :value="option.value">
           <a class="dropdown-item" @click="onClick(option.value); key = option.key; value = option.value" href="javascript: void(0)">{{option.key}}</a>
         </li>
@@ -17,7 +17,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 export default {
   name: 'ModelDropDown',
-  id: 'select-model',
+  id: 'select-dataset',
   props: {
     description: String,
   },

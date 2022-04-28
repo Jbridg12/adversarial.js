@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import {nextImage, uploadImage, predictImg, attack} from "../../public/js/intro.js"
-import {updateImage} from './ImageContainer.vue'
+import {nextImage, uploadImage, predictImg, attack, changeDataset} from "../../public/js/intro.js"
 export default {
   name: 'Button',
   props: {
@@ -37,11 +36,17 @@ export default {
           predict.disabled = false
           adv.disabled = false
         }
-		else if(this.description == "upload-image"){document.getElementById('fileid').click()}
+		else if(this.description == "upload-image"){
+        let tmp = document.getElementById('select-dataset')
+        tmp.innerHTML = "ImageNet (object recognition, large)"
+        changeDataset('imagenet')
+        this.$emit('changeDataset', 'imagenet')
+        this.$emit('uploadedImage', 'imagenet')
+        document.getElementById('fileid').click()
+      }
 	},
 	upload(){
 		uploadImage()
-		updateImage()
 	}
   }
 }
