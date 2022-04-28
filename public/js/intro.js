@@ -201,8 +201,6 @@ async function loadImagenetModel() {
 
 // On page load
 window.addEventListener('load', showImage);
-//window.addEventListener('load', resetAvailableAttacks);
-//window.addEventListener('load', showBanners);
 
 // Model selection dropdown
 let architecture = "resnet"
@@ -265,36 +263,16 @@ export function changeAttack(attack){
 }
 
 // Generate button
-let flag = true; // They have to press button twice, once to genereate, once to predict
-
 export function attack(){
   resetAdvPrediction();
 	console.log("Destroying all familiarity");
 	generateAdv();
-	/*
-  if(flag){
-		resetAdvPrediction();
-		console.log("Destroying all familiarity");
-		generateAdv();
-		flag = false;
-	}
-	else{
-		console.log("Showing all familiarity");
-		flag = true;
-		predictAdv();
-	}*/
 }
 
 
 export function displayNoise(){
 	
 }
-//$('#generate-adv').addEventListener('click', removeBottomRightOverlay);
-
-
-// View noise / view image link
-//$('#view-noise').addEventListener('click', viewNoise);
-//$('#view-image').addEventListener('click', viewImage);
 
 /************************************************************************
 * Define Event Handlers
@@ -359,8 +337,6 @@ export function testResponse(value){
  * Computes & displays prediction of the current original image
  */
 async function predict() {
-  //$('#predict-original').disabled = true;
-  //$('#predict-original').innerText = 'Loading...';
 
   let model;
   console.log(architecture);
@@ -380,8 +356,6 @@ async function predict() {
     let img = mnistDataset[mnistIdx].xs;
     let resizedImg = tf.image.resizeNearestNeighbor(img.reshape([1, 28, 28, 1]), [32, 32]);
     let RGB = tf.image.grayscaleToRGB(resizedImg);
-    //console.log(model)
-    //_predict(mnistModel, mnistDataset[mnistIdx].xs, lblIdx, MNIST_CLASSES);
     _predict(model, RGB, lblIdx, MNIST_CLASSES);
   } else if (dataset === 'cifar') {
     await loadCifarModel();
@@ -437,8 +411,6 @@ async function predict() {
 	}
   }
 
-  //$('#predict-original').innerText = 'Run Neural Network';
-
   function _predict(model, img, lblIdx, CLASS_NAMES) {
     // Generate prediction
     let pred = model.predict(img);
@@ -467,8 +439,6 @@ async function predict() {
  */
 let advPrediction, advStatus;
 async function generateAdv() {
-  //$('#generate-adv').disabled = true;
-  //$('#generate-adv').innerText = 'Loading...';
 
   let attack;
   switch (selectedAttack) {
@@ -555,7 +525,6 @@ async function generateAdv() {
     let aimg = tf.tidy(() => attack(model, img, lbl, targetLbl, CONFIG));
 
     // Display adversarial example
-    //$('#difference').style.display = 'block';
     await drawImg(aimg, 'adversarial');
 
     // Compute & store adversarial prediction
@@ -576,10 +545,10 @@ async function generateAdv() {
     
     showAdvPrediction(advPrediction, advStatus);
     console.log(advStatus);
+
     // Also compute and draw the adversarial noise (hidden until the user clicks on it)
     let noise = tf.sub(aimg, img).add(0.5).clipByValue(0, 1);  // [Szegedy 14] Intriguing properties of neural networks
-    //drawImg(noise, 'adversarial-noise');
-	//document.getElementsByClassName('generate')[0].children[2].__vue__._props.value = "Print Results"
+    drawImg(noise, 'adversarial-noise');
   }
 }
 
@@ -587,9 +556,6 @@ async function generateAdv() {
  * Displays prediction for the current adversarial image
  * (This function just renders the status we've already computed in generateAdv())
  */
-function predictAdv() {
-  showAdvPrediction(advPrediction, advStatus);
-}
 
 /**
  * Show adversarial noise when the user clicks on the "view noise" link
