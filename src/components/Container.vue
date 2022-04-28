@@ -6,7 +6,7 @@
       <div class="label">Select a Dataset</div>
       <div class="drop-down"><DatasetDropDown @changeDataset = "updateDropdowns"/></div>
       <div class="label">Select an Attack</div>
-      <div class="drop-down"><AttackDropDown/></div>
+      <div class="drop-down"><AttackDropDown :newDataset="newDataset"/></div>
       <div class="label">Turn This Image Into A/An:</div>
       <div class="drop-down"><ImageDropDown :newDataset="newDataset"/></div>
     </div>
@@ -25,7 +25,7 @@
         <br>
         <Button value = "Next Image" description="next-image"/>
         <br>
-        <Button value = "Download Image"/>
+        <Button value = "Download Image" description = "download"/>
       </div>
     </div>
   </div>

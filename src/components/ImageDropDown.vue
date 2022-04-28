@@ -17,8 +17,8 @@ import {changeTarget} from "../../public/js/intro.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 export default {
-  name: 'ModelDropDown',
-  id: 'select-model',
+  name: 'ImageDropDown',
+  id: 'select-target',
   props: {
     description: String,
     newDataset: String,
@@ -68,7 +68,7 @@ export default {
           {key: "Hen", value: '8'},
           {key: "Packet", value: '692'}
         ]
-		}
+		  }
     ],
     key: "Select Target",
     value: "0",

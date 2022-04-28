@@ -19,22 +19,11 @@ export default {
     onClick(){
       if(this.description == "next-image"){nextImage()}
       else if(this.description == "predict") {
-        let predict = document.getElementById('predict')
-        let adv = document.getElementById('adv')
-        predict.disabled = true
-        adv.disabled = true
         predictImg()
-        predict.disabled = false
-        adv.disabled = false
       }
       else if(this.description == "adv"){
-        let predict = document.getElementById('predict')
-        let adv = document.getElementById('adv')
-        predict.disabled = true
-        adv.disabled = true
+        this.$root.$emit('buttonPressed', 0)
         attack()
-        predict.disabled = false
-        adv.disabled = false
       }
       else if(this.description == "upload-image"){
         let tmp = document.getElementById('select-dataset')
@@ -52,13 +41,16 @@ export default {
   },
   data() {
     return {
-        checks: {0:false,1:false,2:false,3:false
-      }
+        checks: {0:false,1:false,2:false,3:false},
+        conditions: {0:false, 1:false},
     } 
   },
   mounted: function() {
     this.$root.$on('dropdownChange', (text) => {
       this.checks[text] = true
+    })
+    this.$root.$on('buttonPressed', (text) => {
+      this.conditions[text] = true
     })
   },
   computed: {
@@ -75,6 +67,10 @@ export default {
       else if (this.description == 'predict') {
         if (this.checks[3] == true && this.checks[1] == true) return false
         else return returnValue
+      }
+      else if (this.description == 'download') {
+        if (this.conditions[0] == true) return false
+        else return true
       }
       else{
         return returnValue
