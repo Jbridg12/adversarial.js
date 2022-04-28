@@ -19,6 +19,8 @@ export default {
     onClick(){
       if(this.description == "next-image"){nextImage()}
       else if(this.description == "predict") {
+        this.$root.$emit('datasetChange', 2)
+        this.$root.$emit('datasetChange', 3)
         predictImg()
       }
       else if(this.description == "adv"){
@@ -26,12 +28,12 @@ export default {
         this.$root.$emit('buttonPressed', 0)
       }
       else if(this.description == "upload-image"){
-        let tmp = document.getElementById('select-dataset')
-        tmp.innerHTML = "ImageNet (object recognition, large)"
+        this.$root.$emit('imageUploaded', 'ImageNet (object recognition, large)')
         changeDataset('imagenet')
         this.$emit('changeDataset', 'imagenet')
         this.$emit('uploadedImage', 'imagenet')
         this.$root.$emit('dropdownChange', 1)
+        this.$root.$emit('buttonPressed', 2)
         document.getElementById('fileid').click()
       }
     },
@@ -52,6 +54,9 @@ export default {
     this.$root.$on('buttonPressed', (text) => {
       this.conditions[text] = true
     })
+    this.$root.$on('datasetChange', (text) => {
+      this.conditions[text] = false
+    })
   },
   computed: {
     isDisabled() {
@@ -71,6 +76,10 @@ export default {
       else if (this.description == 'download') {
         if (this.conditions[0] == true) return false
         else return true
+      }
+      else if (this.description == 'adv') {
+        if (this.conditions[2] == true && this.conditions[3] == true) return true
+        else return returnValue
       }
       else{
         return returnValue

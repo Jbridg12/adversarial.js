@@ -71,7 +71,7 @@ export default {
         ? this.datasets.find(x => x.id === this.newDataset)
         : this.datasets.find(x => x.id === "mnist")
     }
-  }
+  },
 }
 </script>
 

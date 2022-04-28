@@ -85,6 +85,14 @@ export default {
         ? this.datasets.find(x => x.id === this.newDataset)
         : this.datasets.find(x => x.id === "mnist")
     }
+  },
+  mounted: function() {
+    this.$root.$on('imageUploaded', () => {
+      this.key = "Select Target"
+    })
+    this.$root.$on('newTarget', () => {
+      this.key = "Select Target"
+    })
   }
 }  
 /* eslint-enable no-mixed-spaces-and-tabs */
