@@ -196,7 +196,7 @@ async function loadImagenetModel() {
 }
 
 /************************************************************************
-* Attach Event Handlers
+* Web Component Event Functions
 ************************************************************************/
 
 // On page load
@@ -212,6 +212,7 @@ export function changeArchitecture(arch){
 	//resetAttack();
 }
 
+// Dataset selection dropdown
 let dataset = "mnist"
 export function changeDataset(ds){
 	dataset = ds
@@ -387,6 +388,8 @@ async function predict() {
     else if (architecture === 'xception') {model = imagenetXception; }
     else if (architecture === 'mobilenet') {model = imagenetMobilenet; }
 	
+
+  // Xception architecture requires a resized image for imagenet
 	if (architecture === 'xception') { 
 		_predict(model, tf.image.resizeNearestNeighbor(imagenetX[imagenetIdx], [299,299]), imagenetYLbls[imagenetIdx], IMAGENET_CLASSES);
 	}
@@ -414,7 +417,6 @@ async function predict() {
   function _predict(model, img, lblIdx, CLASS_NAMES) {
     // Generate prediction
     let pred = model.predict(img);
-    console.log(pred.max().dataSync())
     let predLblIdx = pred.argMax(1).dataSync()[0];
     let predProb = pred.max().dataSync()[0];
     if (dataset === 'upload') {uploadLblIdx = predLblIdx;}
@@ -543,6 +545,7 @@ async function generateAdv() {
       advStatus = {msg: '✅ Prediction is still correct. Attack failed.', statusClass: 'status-green'};
     }
     
+    // Displays prediction for the current adversarial image
     showAdvPrediction(advPrediction, advStatus);
     console.log(advStatus);
 
@@ -551,11 +554,6 @@ async function generateAdv() {
     drawImg(noise, 'adversarial-noise');
   }
 }
-
-/**
- * Displays prediction for the current adversarial image
- * (This function just renders the status we've already computed in generateAdv())
- */
 
 /**
  * Show adversarial noise when the user clicks on the "view noise" link
@@ -616,70 +614,6 @@ async function resetAttack() {
   }
 }
 
-/**
- * Reset available attacks and target labels when a new image is selected
- */
-function resetAvailableAttacks() {
-  const MNIST_TARGETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const CIFAR_TARGETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const FMNIST_TARGETS = [4, 3, 7, 2];
-  const IMAGENET_TARGETS = [934, 413, 151];
-
-  
-  if (dataset === 'mnist') {
-    let originalLbl = mnistDataset[mnistIdx].ys.argMax(1).dataSync()[0];
-    _resetAvailableAttacks(true, originalLbl, MNIST_TARGETS, MNIST_CLASSES);
-  } else if (dataset === 'cifar') {
-    let originalLbl = cifarDataset[cifarIdx].ys.argMax(1).dataSync()[0];
-    _resetAvailableAttacks(true, originalLbl, CIFAR_TARGETS, CIFAR_CLASSES);
-   }
-  else if (dataset === 'fmnist') {
-    let originalLbl = fmnistYLbls[fmnistIdx];
-    _resetAvailableAttacks(false, originalLbl, FMNIST_TARGETS, FMNIST_CLASSES);
-  }
-  else if (dataset === 'imagenet') {
-    let originalLbl = imagenetYLbls[imagenetIdx];
-    _resetAvailableAttacks(false, originalLbl, IMAGENET_TARGETS, IMAGENET_CLASSES);
-  }
-
-  function _resetAvailableAttacks(jsma, originalLbl, TARGETS, CLASS_NAMES) {
-    let selectAttack = $('#select-attack');
-    let selectTarget = $('#select-target');
-
-    // Add or remove JSMA as an option
-    if (jsma === true) {
-      selectAttack.querySelector('option[value=jsma]').disabled = false;
-    } else {
-      selectAttack.querySelector('option[value=jsma]').disabled = true;
-      if (selectAttack.value === 'jsma') { selectAttack.value = 'fgsmTargeted'; }
-    }
-
-    // Filter available target classes in dropdown
-    if (selectTarget.getAttribute('data-model') === dataset) {
-      // Go through options and disable the current class as a target class
-      selectTarget.options.forEach(option => {
-        if (parseInt(option.value) === originalLbl) { option.disabled = true; }
-        else {option.disabled = false; }
-      });
-      // Reset the selected option if it's now disabled
-      if (parseInt(selectTarget.value) === originalLbl) {
-        selectTarget.options[0].selected = true;
-        if (parseInt(selectTarget.value) === originalLbl) {
-          selectTarget.options[1].selected = true;
-        }
-      }
-    } else {
-      // Rebuild options from scratch (b/c the user chose a new model)
-      selectTarget.innerHTML = '';
-      TARGETS.forEach(i => {
-        let option = new Option(CLASS_NAMES[i], i);
-        if (i === originalLbl) { option.disabled = true; }
-        selectTarget.appendChild(option);
-      });
-      selectTarget.setAttribute('data-model', dataset);
-    }
-  }
-}
 
 /**
  * Removes the overlay on the left half of the dashboard when the user selects a model
@@ -749,8 +683,15 @@ function supports32BitWebGL() {
 }
 
 /************************************************************************
-* Visualize Images
+* Formatting for displaying/removing results from visibility
 ************************************************************************/
+
+function resetPrediction() {
+  $('#prediction').innerHTML = '';
+  $('#prediction').style.display = 'inline';
+  $('#prediction-status').innerHTML = '';
+  $('#prediction-status').className = '';
+}
 
 function showPrediction(msg, status) {
   console.log("predicting, no writing");
@@ -758,13 +699,6 @@ function showPrediction(msg, status) {
   $('#prediction').style.display = 'inline';
   $('#prediction-status').innerHTML = status.msg;
   $('#prediction-status').className = status.statusClass;
-}
-
-function resetPrediction() {
-  $('#prediction').innerHTML = '';
-  $('#prediction').style.display = 'inline';
-  $('#prediction-status').innerHTML = '';
-  $('#prediction-status').className = '';
 }
 
 function resetAdvPrediction() {
@@ -779,6 +713,10 @@ function showAdvPrediction(msg, status) {
   $('#prediction-adv-status').innerHTML = status.msg;
   $('#prediction-adv-status').className = status.statusClass;
 }
+
+/************************************************************************
+* Visualize Images
+************************************************************************/
 
 let mnistIdx = 0;
 async function showMnist() {
