@@ -36,7 +36,13 @@ export default {
     this.$root.$emit('dropdownChange', 1)
 		changeDataset(value)
     this.$emit('changeDataset', value)
+    this.$root.$emit('newTarget')
 	},
+  },
+  mounted: function() {
+    this.$root.$on('imageUploaded', (text) => {
+      this.key = text
+    })
   }
 }  
 </script>
