@@ -19,8 +19,24 @@ export default {
   methods: {
     onClick(){
 		if(this.description == "next-image"){nextImage()}
-        else if(this.description == "predict") {predictImg()}
-        else if(this.description == "adv"){attack()}
+        else if(this.description == "predict") {
+          let predict = document.getElementById('predict')
+          let adv = document.getElementById('adv')
+          predict.disabled = true
+          adv.disabled = true
+          predictImg()
+          predict.disabled = false
+          adv.disabled = false
+        }
+        else if(this.description == "adv"){
+          let predict = document.getElementById('predict')
+          let adv = document.getElementById('adv')
+          predict.disabled = true
+          adv.disabled = true
+          attack()
+          predict.disabled = false
+          adv.disabled = false
+        }
 		else if(this.description == "upload-image"){document.getElementById('fileid').click()}
 	},
 	upload(){
@@ -45,5 +61,11 @@ export default {
   border: 0;
   white-space: normal;
   word-wrap: break-word;
+}
+.button:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background: #999;
+  color: #555;
 }
 </style>
