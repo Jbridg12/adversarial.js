@@ -182,7 +182,6 @@ async function loadFmnistModel() {
 
 /****************************** Load ImageNet ******************************/
 
-let imagenetModel;
 let imagenetVgg16;
 let imagenetResnet;
 let imagenetXception;
@@ -325,10 +324,6 @@ function showImage() {
   else if (modelName === 'imagenet') { showImagenet(); }
 }
 
-export function testResponse(value){
-	let response = "Confirmation of Event from " + value;
-	console.log(response);
-}
 /**
  * Computes & displays prediction of the current original image
  */
@@ -582,41 +577,6 @@ function resetOnNewImage() {
   $('#prediction-status').innerHTML = '';
   $('#prediction-status').className = '';
   $('#prediction-status').style.marginBottom = '9px';
-}
-
-/**
- * Check the user's device and display appropriate warning messages
- */
-function showBanners() {
-  if (!supports32BitWebGL()) { $('#mobile-banner').style.display = 'block'; }
-  else if (!isDesktopChrome()) { $('#chrome-banner').style.display = 'block'; }
-}
-
-/**
- * Returns if it looks like the user is on desktop Google Chrome
- * https://stackoverflow.com/a/13348618/908744
- */
-function isDesktopChrome() {
-  var isChromium = window.chrome;
-  var winNav = window.navigator;
-  var vendorName = winNav.vendor;
-  var isOpera = typeof window.opr !== "undefined";
-  var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
-  var isIOSChrome = winNav.userAgent.match("CriOS");
-
-  if (isIOSChrome) {
-    return false;
-  } else if (
-    isChromium !== null &&
-    typeof isChromium !== "undefined" &&
-    vendorName === "Google Inc." &&
-    isOpera === false &&
-    isIEedge === false
-  ) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 /**
