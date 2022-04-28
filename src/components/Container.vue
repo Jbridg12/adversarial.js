@@ -21,7 +21,7 @@
         <Button value = "Generate" id = "adv" description="adv"/>
       </div>
       <div class="upload">
-        <Button value = "Upload Image" description="upload-image"/>
+        <Button value = "Upload Image" description="upload-image" @uploadedImage = "uploadedDataset" @changeDataset = "updateDropdowns"/>
         <br>
         <Button value = "Next Image" description="next-image"/>
         <br>
@@ -53,6 +53,9 @@ export default {
   },
   methods: {
     updateDropdowns(val) {
+      this.newDataset = val
+    },
+    uploadedDataset(val) {
       this.newDataset = val
     }
   },

@@ -1,7 +1,6 @@
 <template>
   <div>
     <canvas id="original" class="tableimg" max-width="224" height="224" data-bs-toggle="modal" data-bs-target="#compareModal"></canvas>
-    <img id = "frame" src="" class = "hideimage img-fluid" alt = "responsive" data-bs-toggle="modal" data-bs-target="#compareModal">
     <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
