@@ -578,7 +578,7 @@ async function generateAdv() {
     console.log(advStatus);
     // Also compute and draw the adversarial noise (hidden until the user clicks on it)
     let noise = tf.sub(aimg, img).add(0.5).clipByValue(0, 1);  // [Szegedy 14] Intriguing properties of neural networks
-    //drawImg(noise, 'adversarial-noise');
+    drawImg(noise, 'adversarial-noise');
 	//document.getElementsByClassName('generate')[0].children[2].__vue__._props.value = "Print Results"
   }
 }

@@ -22,8 +22,8 @@ export default {
         predictImg()
       }
       else if(this.description == "adv"){
-        this.$root.$emit('buttonPressed', 0)
         attack()
+        this.$root.$emit('buttonPressed', 0)
       }
       else if(this.description == "upload-image"){
         let tmp = document.getElementById('select-dataset')
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
         checks: {0:false,1:false,2:false,3:false},
-        conditions: {0:false, 1:false},
+        conditions: {0:false, 1:false, 2:false, 3:false}, //i plan to use 1 for the generate button after RNN and 2 and 3 for the generate button after image uploaded 
     } 
   },
   mounted: function() {
