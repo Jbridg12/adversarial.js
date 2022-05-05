@@ -69,14 +69,14 @@ export function fgsmTargeted(model, img, lbl, targetLbl, {ε = 0.1, loss = 2} = 
     return l;
   }
   let lossFn = [loss0, loss1, loss2][loss];
-
   // Perturb the image for one step in the direction of DECREASING loss
   let grad = tf.grad(lossFn);
-  let delta = tf.sign(grad(img)).mul(ε);
+  let delta = tf.sign(grad(img)).mul((ε));
   img = img.sub(delta).clipByValue(0, 1);
 
   return img;
 }
+
 
 /**
  * Basic Iterative Method (BIM / I-FGSM / PGD)
