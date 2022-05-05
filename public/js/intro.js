@@ -265,11 +265,15 @@ export function attack(){
 }
 
 export function resetNoise() {
-
+  let noise = document.getElementById('adversarial-noise')
+  let context = noise.getContext('2d')
+  context.clearRect(0, 0, noise.width, noise.height)
 }
 
 export function resetAdv() {
-  
+  let adv = document.getElementById('adversarial')
+  let context = noise.getContext('2d')
+  context.clearRect(0, 0, adv.width, adv.height)
 }
 
 /************************************************************************

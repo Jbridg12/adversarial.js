@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {nextImage, uploadImage, predictImg, attack, changeDataset} from "../../public/js/intro.js"
+import {nextImage, uploadImage, predictImg, attack, changeDataset, resetNoise, resetAdv} from "../../public/js/intro.js"
 export default {
   name: 'Button',
   props: {
@@ -17,7 +17,11 @@ export default {
   },
   methods: {
     onClick(){
-      if(this.description == "next-image"){nextImage()}
+      if(this.description == "next-image"){
+        resetNoise()
+        resetAdv()
+        nextImage()
+      }
       else if(this.description == "predict") {
         this.$root.$emit('datasetChange', 2)
         this.$root.$emit('datasetChange', 3)
@@ -33,10 +37,8 @@ export default {
         this.$root.$emit('buttonPressed', 0)
       }
       else if(this.description == "upload-image"){
-        let noise = document.getElementById('adversarial-noise')
-        let context = noise.getContext('2d')
-        context.clearRect(0, 0, noise.width, noise.height)
-        
+        resetNoise()
+        resetAdv()
         this.$root.$emit('imageUploaded', 'ImageNet (object recognition, large)')
         changeDataset('imagenet')
         this.$emit('changeDataset', 'imagenet')
