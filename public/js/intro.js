@@ -527,6 +527,7 @@ async function generateAdv() {
 
     // Display adversarial example
     await drawImg(aimg, 'adversarial');
+    await drawImg(aimg, 'og');
 
     // Compute & store adversarial prediction
     let pred = model.predict(aimg);
