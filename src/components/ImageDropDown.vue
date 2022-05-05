@@ -65,7 +65,7 @@ export default {
           {key: "Tiger Beetle", value: '300'},
           {key: "American Lobster", value: '122'},
           {key: "Hen", value: '8'},
-          {key: "Packet", value: '692'}
+          {key: "Jigsaw Puzzle", value: '611'}
         ]
       }
     ],
