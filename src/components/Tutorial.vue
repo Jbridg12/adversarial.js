@@ -11,7 +11,8 @@
     </ol>
 
     You can cycle through preset images using 'Next Image', or you can choose to upload your own image using 'Upload Image'.
-    <br>Once the model has been ran, you can choose to 'Download Image' to save what you generated.
+    <br><br>If you want to see the original image next to the noise applied and the adversarial image, click on the image.
+    <br><br>Once the model has been ran, you can choose to 'Download Image' to save what you generated.
   </div>
 </template>
 

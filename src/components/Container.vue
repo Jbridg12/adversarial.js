@@ -11,6 +11,7 @@
       <div class="drop-down"><ImageDropDown :newDataset="newDataset"/></div>
     </div>
     <div class="imageContainer">
+      <div class="clickMe">Click me!</div>
       <ImageContainer />
       <PredictionData />
     </div>
@@ -99,7 +100,7 @@ export default {
 .imageContainer {
   width: 55%;
   height: fit-content;
-  padding-top: 4em;
+  padding-top: 2em;
 }
 
 .upload {
@@ -124,6 +125,11 @@ export default {
 .buttonDiv {
   width:100%;
   display:flex;
+}
+
+.clickMe {
+  text-align: center;
+  width: 100%;
 }
 
 @media (max-width: 600px) {
