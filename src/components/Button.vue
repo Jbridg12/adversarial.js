@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<input class="button" type="button" v-model=value @click = "onClick()" :disabled="isDisabled">
+		<input class="button" type="button" v-model=value @click = "onClick()" :disabled="isDisabled"> 
 		<div class="uploader">
 			<input id="fileid" type="file" accept="image/*" @change = "upload()" hidden/>
 		</div>
@@ -21,13 +21,22 @@ export default {
       else if(this.description == "predict") {
         this.$root.$emit('datasetChange', 2)
         this.$root.$emit('datasetChange', 3)
-        predictImg()
+        this.$root.$emit('loading')
+        const loadingTheSpinner = async () => {
+          await predictImg()
+        }
+        loadingTheSpinner()
+        this.$root.$emit('loaded')
       }
       else if(this.description == "adv"){
         attack()
         this.$root.$emit('buttonPressed', 0)
       }
       else if(this.description == "upload-image"){
+        let noise = document.getElementById('adversarial-noise')
+        let context = noise.getContext('2d')
+        context.clearRect(0, 0, noise.width, noise.height)
+        
         this.$root.$emit('imageUploaded', 'ImageNet (object recognition, large)')
         changeDataset('imagenet')
         this.$emit('changeDataset', 'imagenet')

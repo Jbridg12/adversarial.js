@@ -264,9 +264,12 @@ export function attack(){
 	generateAdv();
 }
 
+export function resetNoise() {
 
-export function displayNoise(){
-	
+}
+
+export function resetAdv() {
+  
 }
 
 /************************************************************************
