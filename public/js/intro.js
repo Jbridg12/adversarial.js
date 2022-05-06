@@ -268,6 +268,16 @@ export function attack(){
 	generateAdv();
 }
 
+export function download(){
+  let canvas = document.getElementById('adversarial');
+  var a = document.createElement('a');
+  a.href = canvas.toDataURL();
+  a.download = "adversarial.png";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 /************************************************************************
 * Define Event Handlers
 ************************************************************************/

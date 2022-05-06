@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {nextImage, uploadImage, predictImg, attack, changeDataset} from "../../public/js/intro.js"
+import {nextImage, uploadImage, predictImg, attack, changeDataset, download} from "../../public/js/intro.js"
 export default {
   name: 'Button',
   props: {
@@ -26,6 +26,9 @@ export default {
       else if(this.description == "adv"){
         attack()
         this.$root.$emit('buttonPressed', 0)
+      }
+      else if(this.description == "download"){
+        download();
       }
       else if(this.description == "upload-image"){
         this.$root.$emit('imageUploaded', 'ImageNet (object recognition, large)')
