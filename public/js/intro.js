@@ -10,25 +10,32 @@ import * as tf from '../../node_modules/@tensorflow/tfjs';
 const $ = query => document.querySelector(query);
 
 const MNIST_CONFIGS = {
-  'fgsmTargeted': {ε: 0.2},  // Targeted FGSM works slightly better on MNIST with higher distortion
+  'fgsmTargetedWeak': {ε: 0.2},  // Targeted FGSM works slightly better on MNIST with higher distortion
+  'fgsmTargetedMedium': {ε: 0.4},
+  'fgsmTargetedStrong': {ε: 0.8},
   'bimTargeted': {iters: 20},  // Targeted BIM works slightly better on MNIST with more iterations (pushes misclassification confidence up)
 };
 
 const FMNIST_CONFIGS = {
-  'fgsmTargeted': {ε: 0.2},
+  'fgsmTargetedWeak': {ε: 0.2},  // Targeted FGSM works slightly better on MNIST with higher distortion
+  'fgsmTargetedMedium': {ε: 0.4},
+  'fgsmTargetedStrong': {ε: 0.8},
   'bimTargeted': {iters: 20},  // Needs more iterations to work well
 };
 
 const CIFAR_CONFIGS = {
-  'fgsm': {ε: 0.05},  // 0.1 L_inf perturbation is too visible in color
+  'fgsmTargetedWeak': {ε: 0.1, loss: 1},  // 0.1 L_inf perturbation is too visible in color
+  'fgsmTargetedMedium': {ε: 0.2, loss: 1},
+  'fgsmTargetedStrong': {ε: 0.6, loss: 1},
   'jsmaOnePixel': {ε: 75},  // JSMA one-pixel on CIFAR-10 requires more ~3x pixels than MNIST
   'jsma': {ε: 75},  // JSMA on CIFAR-10 also requires more ~3x pixels than MNIST
   'cw': {c: 1, λ: 0.05}  // Tried to minimize distortion, but not sure it worked
 };
 
 const IMAGENET_CONFIGS = {
-  'fgsm': {ε: 0.05},  // 0.1 L_inf perturbation is too visible in color
-  'fgsmTargeted': {loss: 1},  // The 2nd loss function is too heavy for ImageNet
+  'fgsmTargetedWeak': {ε: 0.1, loss: 1},  // 0.1 L_inf perturbation is too visible in color
+  'fgsmTargetedMedium': {ε: 0.2, loss: 1}, // Loss 2 does not work on Imagenet
+  'fgsmTargetedStrong': {ε: 0.4, loss: 1},
   'jsmaOnePixel': {ε: 75},  // This is unsuccessful. I estimate that it requires ~50x higher ε than CIFAR-10 to be successful on ImageNet, but that is too slow
   'cw': {κ: 5, c: 1, λ: 0.05}  // Generate higher confidence adversarial examples, and minimize distortion
 };
@@ -229,7 +236,6 @@ export function nextImage(){
 // Upload image button
 let revertDataset;
 export function uploadImage(){
-	console.log("Stealing all your private data.");
 	revertDataset = dataset;
 	dataset = 'upload';
 	getImg();
@@ -239,7 +245,6 @@ export function uploadImage(){
 
 // Predict button (original image
 export function predictImg(){
-    console.log("Releasing private data");
     predict();
 }
 
@@ -260,10 +265,10 @@ export function changeAttack(attack){
 // Generate button
 export function attack(){
   resetAdvPrediction();
-	console.log("Destroying all familiarity");
 	generateAdv();
 }
 
+<<<<<<< HEAD
 let noise;
 export function resetNoise() {
   noise = document.getElementById('adversarial-noise')
@@ -286,6 +291,8 @@ export function hideLoader() {
   myDiv.setAttribute("style", "display: none;");
 }
 
+=======
+>>>>>>> a110a16cf6872331982be5bdfe89d87e2a6dab15
 /************************************************************************
 * Define Event Handlers
 ************************************************************************/
@@ -322,23 +329,20 @@ async function getImg(){
  * Renders the next image from the sample dataset in the original canvas
  */
 function showNextImage() {
-  let modelName = dataset;
-  //let modelName = $('#select-model').value;
-  if (modelName === 'mnist') { showNextMnist(); }
-  else if (modelName === 'cifar') { showNextCifar(); }
-  else if (modelName === 'fmnist') { showNextFmnist(); }
-  else if (modelName === 'imagenet') { showNextImagenet(); }
+  if (dataset === 'mnist') { showNextMnist(); }
+  else if (dataset === 'cifar') { showNextCifar(); }
+  else if (dataset === 'fmnist') { showNextFmnist(); }
+  else if (dataset === 'imagenet') { showNextImagenet(); }
 }
 
 /**
  * Renders the current image from the sample dataset in the original canvas
  */
 function showImage() {
-  let modelName = dataset;
-  if (modelName === 'mnist') { showMnist(); }
-  else if (modelName === 'cifar') { showCifar(); }
-  else if (modelName === 'fmnist') { showFmnist(); }
-  else if (modelName === 'imagenet') { showImagenet(); }
+  if (dataset === 'mnist') { showMnist(); }
+  else if (dataset === 'cifar') { showCifar(); }
+  else if (dataset === 'fmnist') { showFmnist(); }
+  else if (dataset === 'imagenet') { showImagenet(); }
 }
 
 /**
@@ -452,8 +456,11 @@ let advPrediction, advStatus;
 async function generateAdv() {
 
   let attack;
+  console.log(selectedAttack);
   switch (selectedAttack) {
-    case 'fgsmTargeted': attack = fgsmTargeted; break;
+    case 'fgsmTargetedWeak': attack = fgsmTargeted; break;
+    case 'fgsmTargetedMedium': attack = fgsmTargeted; break;
+    case 'fgsmTargetedStrong': attack = fgsmTargeted; break;
     case 'bimTargeted': attack = bimTargeted; break;
     case 'jsmaOnePixel': attack = jsmaOnePixel; break;
     case 'jsma': attack = jsma; break;
@@ -461,7 +468,6 @@ async function generateAdv() {
   }
     
   let adv_model;
-  let modelName = dataset;
   let targetLblIdx = selectedTarget;
   if (dataset === 'mnist') {
     await loadMnistModel();
@@ -476,7 +482,7 @@ async function generateAdv() {
     let resizedImg = tf.image.resizeNearestNeighbor(img.reshape([1, 28, 28, 1]), [32, 32]);
     let RGB = tf.image.grayscaleToRGB(resizedImg);
     
-    await _generateAdv(adv_model, RGB, mnistDataset[mnistIdx].ys, MNIST_CLASSES, MNIST_CONFIGS[attack.name]);
+    await _generateAdv(adv_model, RGB, mnistDataset[mnistIdx].ys, MNIST_CLASSES, MNIST_CONFIGS[selectedAttack]);
   } 
   else if (dataset === 'cifar') {
     await loadCifarModel();
@@ -565,6 +571,8 @@ async function generateAdv() {
     // Also compute and draw the adversarial noise (hidden until the user clicks on it)
     let noise = tf.sub(aimg, img).add(0.5).clipByValue(0, 1);  // [Szegedy 14] Intriguing properties of neural networks
     drawImg(noise, 'adversarial-noise');
+    
+    
   }
 }
 

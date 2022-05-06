@@ -115,10 +115,19 @@ export default {
   white-space: normal;
   word-wrap: break-word;
 }
+
 .button:disabled {
   cursor: not-allowed;
   pointer-events: none;
   background: #999;
   color: #555;
+}
+
+.button:active {
+  background: #ced7e2;
+  -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+          box-shadow: inset 0px 0px 5px #c1c1c1;
+   outline: none;
 }
 </style>

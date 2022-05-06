@@ -48,16 +48,16 @@ export default {
       },
       {id: 'cifar',
         options: [
-          {key: "Plane", value: "0"},
-          {key: "Car", value: "1"},
-          {key: "Bird", value: "2"},
-          {key: "Cat", value: "3"},
-          {key: "Deer", value: "4"},
-          {key: "Dog", value: "5"},
-          {key: "Frog", value: "6"},
-          {key: "Horse", value: "7"},
-          {key: "Ship", value: "8"},
-          {key: "Truck", value: "9"}
+          {key: "Plane", value: '0'},
+          {key: "Car", value: '1'},
+          {key: "Bird", value: '2'},
+          {key: "Cat", value: '3'},
+          {key: "Deer", value: '4'},
+          {key: "Dog", value: '5'},
+          {key: "Frog", value: '6'},
+          {key: "Horse", value: '7'},
+          {key: "Ship", value: '8'},
+          {key: "Truck", value: '9'}
         ]
       },
     {id: 'imagenet',
@@ -65,7 +65,7 @@ export default {
           {key: "Tiger Beetle", value: '300'},
           {key: "American Lobster", value: '122'},
           {key: "Hen", value: '8'},
-          {key: "Packet", value: '692'}
+          {key: "Jigsaw Puzzle", value: '611'}
         ]
       }
     ],

@@ -28,8 +28,10 @@ export default {
         options: [
           { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
           { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
-          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
-          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' },  
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargetedWeak'},
+          { key: "Fast Gradient Sign Method (medium)", value: 'fgsmTargetedMedium'},
+          { key: "Fast Gradient Sign Method (strong)", value: 'fgsmTargetedStrong'}
         ]
       },
       {id: 'fmnist',
@@ -37,22 +39,28 @@ export default {
           { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
           { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
           { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
-          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargetedWeak'},
+          { key: "Fast Gradient Sign Method (medium)", value: 'fgsmTargetedMedium'},
+          { key: "Fast Gradient Sign Method (strong)", value: 'fgsmTargetedStrong'}
         ]
       },
       {id: 'cifar',
         options: [
           { key: "Jacobian-based Saliency Map Attack", value: 'jsma' },
           { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
-          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
-          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+          { key: "Basic Iterative Method (weaker)", value: 'bimTargeted' },  
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargetedWeak'},
+          { key: "Fast Gradient Sign Method (medium)", value: 'fgsmTargetedMedium'},
+          { key: "Fast Gradient Sign Method (strong)", value: 'fgsmTargetedStrong'}
         ]
       },
       {id: 'imagenet',
         options: [
           { key: "Jacobian-based Saliency Map Attack 1-Pixel (stronger)", value: 'jsmaOnePixel' },
-          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' }, 
-          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargeted'}
+          { key: "Basic Iterative Method (stronger)", value: 'bimTargeted' },  
+          { key: "Fast Gradient Sign Method (weak)", value: 'fgsmTargetedWeak'},
+          { key: "Fast Gradient Sign Method (medium)", value: 'fgsmTargetedMedium'},
+          { key: "Fast Gradient Sign Method (strong)", value: 'fgsmTargetedStrong'}
         ]
       }
     ],
