@@ -268,7 +268,6 @@ export function attack(){
 	generateAdv();
 }
 
-<<<<<<< HEAD
 let noise;
 export function resetNoise() {
   noise = document.getElementById('adversarial-noise')
@@ -291,8 +290,6 @@ export function hideLoader() {
   myDiv.setAttribute("style", "display: none;");
 }
 
-=======
->>>>>>> a110a16cf6872331982be5bdfe89d87e2a6dab15
 /************************************************************************
 * Define Event Handlers
 ************************************************************************/
