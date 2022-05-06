@@ -270,6 +270,16 @@ export function attack(){
   }
 }
 
+export function download(){
+  let canvas = document.getElementById('adversarial');
+  var a = document.createElement('a');
+  a.href = canvas.toDataURL();
+  a.download = "adversarial.png";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 let noise;
 export function resetNoise() {
   noise = document.getElementById('adversarial-noise')
@@ -709,4 +719,3 @@ async function drawImg(img, element) {
     await tf.browser.toPixels(resizedImg, canvas);
   }
 }
-/* eslint-enable no-unused-vars */

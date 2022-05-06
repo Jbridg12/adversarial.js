@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {nextImage, uploadImage, predictImg, attack, changeDataset, resetNoise, resetAdv, showLoader} from "../../public/js/intro.js"
+import {nextImage, uploadImage, predictImg, attack, changeDataset, download, resetNoise, resetAdv, showLoader} from "../../public/js/intro.js"
 export default {
   name: 'Button',
   props: {
@@ -33,6 +33,9 @@ export default {
         showLoader()
         if (document.getElementById("loadSpinner").style.display == "block") attack()
         this.$root.$emit('buttonPressed', 0)
+      }
+      else if(this.description == "download"){
+        download();
       }
       else if(this.description == "upload-image"){
         resetNoise()
