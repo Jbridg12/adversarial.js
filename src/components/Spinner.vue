@@ -1,9 +1,8 @@
 <template>
-  <div>
-  <span v-show="loading" class="spinner-border hidden" role="status"> </span>
-  <p v-show="loading">
-    Loading... {{key}}
-  </p>
+ <div class = "loading hidden" id = "loadSpinner">
+    <strong>Loading {{key}}...</strong>
+    <div class="spinner-border" role="status">
+    </div>
   </div>
 </template>
 
@@ -13,22 +12,19 @@ export default {
   props: {
     description: String
   },
-  mounted: function() {
-    this.$root.$on('loading', (text) => {
-      this.loading = true
-      this.key = text
-    }),
-    this.$root.$on('loaded', () => {
-      this.loading = false
-    })
-  },
   data: () => ({
     key: "Prediction",
-    loading: false
   }),
+  mounted: function() {
+    this.$root.$on('loading', (key) => {
+      this.key = key;
+    })
+  }
 }
 </script>
 
 <style>
-
+.hidden {
+  display: none;
+}
 </style>

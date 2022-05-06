@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {nextImage, uploadImage, predictImg, attack, changeDataset, resetNoise, resetAdv} from "../../public/js/intro.js"
+import {nextImage, uploadImage, predictImg, attack, changeDataset, resetNoise, resetAdv, showLoader} from "../../public/js/intro.js"
 export default {
   name: 'Button',
   props: {
@@ -25,14 +25,12 @@ export default {
       else if(this.description == "predict") {
         this.$root.$emit('datasetChange', 2)
         this.$root.$emit('datasetChange', 3)
-        this.$root.$emit('loading')
-        const loadingTheSpinner = async () => {
-          await predictImg()
-        }
-        loadingTheSpinner()
-        this.$root.$emit('loaded')
+        this.$root.$emit('loading', "Prediction")
+        predictImg()
       }
       else if(this.description == "adv"){
+        this.$root.$emit('loading', "Adversarial")
+        showLoader()
         attack()
         this.$root.$emit('buttonPressed', 0)
       }
