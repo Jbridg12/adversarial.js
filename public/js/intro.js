@@ -264,8 +264,9 @@ export function changeAttack(attack){
 
 // Generate button
 export function attack(){
+  showLoader();
   resetAdvPrediction();
-	generateAdv();
+  generateAdv();
 }
 
 export function download(){
@@ -285,9 +286,10 @@ export function resetNoise() {
   context.clearRect(0, 0, noise.width, noise.height)
 }
 
+let adv;
 export function resetAdv() {
-  let adv = document.getElementById('adversarial')
-  let context = noise.getContext('2d')
+  adv = document.getElementById('adversarial')
+  let context = adv.getContext('2d')
   context.clearRect(0, 0, adv.width, adv.height)
 }
 
@@ -464,6 +466,7 @@ async function generateAdv() {
 
   let attack;
   console.log(selectedAttack);
+  showLoader();
   switch (selectedAttack) {
     case 'fgsmTargetedWeak': attack = fgsmTargeted; break;
     case 'fgsmTargetedMedium': attack = fgsmTargeted; break;
