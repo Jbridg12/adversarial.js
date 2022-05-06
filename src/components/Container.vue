@@ -14,6 +14,7 @@
       <div class="clickMe">Click me!</div>
       <ImageContainer />
       <PredictionData />
+      <Spinner />
     </div>
     <div class="buttonDiv">
       <div class="generate">
@@ -40,6 +41,7 @@ import AttackDropDown from './AttackDropDown.vue'
 import ImageDropDown from './ImageDropDown.vue'
 import ImageContainer from './ImageContainer.vue'
 import PredictionData from './PredictionData.vue'
+import Spinner from './Spinner.vue'
 
 export default {
   name: 'Container',
@@ -50,7 +52,8 @@ export default {
     AttackDropDown,
     ImageDropDown,
     ImageContainer,
-    PredictionData
+    PredictionData,
+    Spinner
   },
   methods: {
     updateDropdowns(val) {

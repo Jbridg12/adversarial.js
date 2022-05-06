@@ -268,6 +268,28 @@ export function attack(){
 	generateAdv();
 }
 
+let noise;
+export function resetNoise() {
+  noise = document.getElementById('adversarial-noise')
+  let context = noise.getContext('2d')
+  context.clearRect(0, 0, noise.width, noise.height)
+}
+
+export function resetAdv() {
+  let adv = document.getElementById('adversarial')
+  let context = noise.getContext('2d')
+  context.clearRect(0, 0, adv.width, adv.height)
+}
+
+export function showLoader() {
+  var myDiv = document.getElementById("loadSpinner");
+  myDiv.setAttribute("style", "display: block;");
+}
+export function hideLoader() {
+  var myDiv = document.getElementById("loadSpinner");
+  myDiv.setAttribute("style", "display: none;");
+}
+
 /************************************************************************
 * Define Event Handlers
 ************************************************************************/
@@ -327,6 +349,7 @@ async function predict() {
 
   let model;
   console.log(architecture);
+  showLoader();
   if (dataset === 'mnist') {
     
     
@@ -420,6 +443,7 @@ async function predict() {
     }
     showPrediction(`"${CLASS_NAMES[predLblIdx]}"<br/>Probability: ${(predProb * 100).toFixed(2)}%`, status);
   }
+  hideLoader();
  }
 
 /**
@@ -518,6 +542,7 @@ async function generateAdv() {
 
     // Display adversarial example
     await drawImg(aimg, 'adversarial');
+    await drawImg(aimg, 'og');
 
     // Compute & store adversarial prediction
     let pred = model.predict(aimg);
@@ -536,6 +561,7 @@ async function generateAdv() {
     }
     
     // Displays prediction for the current adversarial image
+    hideLoader();
     showAdvPrediction(advPrediction, advStatus);
     console.log(advStatus);
 
@@ -679,4 +705,3 @@ async function drawImg(img, element) {
     await tf.browser.toPixels(resizedImg, canvas);
   }
 }
-/* eslint-enable no-unused-vars */
