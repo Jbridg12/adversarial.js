@@ -31,7 +31,7 @@ export default {
       else if(this.description == "adv"){
         this.$root.$emit('loading', "Adversarial")
         showLoader()
-        attack()
+        if (document.getElementById("loadSpinner").style.display == "block") attack()
         this.$root.$emit('buttonPressed', 0)
       }
       else if(this.description == "upload-image"){

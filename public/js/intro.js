@@ -264,11 +264,12 @@ export function changeAttack(attack){
 
 // Generate button
 export function attack(){
-  resetAdvPrediction();
-	generateAdv();
+  if (document.getElementById("loadSpinner").style.display == "block") {
+    resetAdvPrediction();
+    generateAdv();
+  }
 }
 
-<<<<<<< HEAD
 let noise;
 export function resetNoise() {
   noise = document.getElementById('adversarial-noise')
@@ -276,13 +277,14 @@ export function resetNoise() {
   context.clearRect(0, 0, noise.width, noise.height)
 }
 
+let adv;
 export function resetAdv() {
-  let adv = document.getElementById('adversarial')
-  let context = noise.getContext('2d')
+  adv = document.getElementById('adversarial')
+  let context = adv.getContext('2d')
   context.clearRect(0, 0, adv.width, adv.height)
 }
 
-export function showLoader() {
+export async function showLoader() {
   var myDiv = document.getElementById("loadSpinner");
   myDiv.setAttribute("style", "display: block;");
 }
@@ -291,8 +293,6 @@ export function hideLoader() {
   myDiv.setAttribute("style", "display: none;");
 }
 
-=======
->>>>>>> a110a16cf6872331982be5bdfe89d87e2a6dab15
 /************************************************************************
 * Define Event Handlers
 ************************************************************************/
@@ -457,6 +457,7 @@ async function generateAdv() {
 
   let attack;
   console.log(selectedAttack);
+  await showLoader();
   switch (selectedAttack) {
     case 'fgsmTargetedWeak': attack = fgsmTargeted; break;
     case 'fgsmTargetedMedium': attack = fgsmTargeted; break;
