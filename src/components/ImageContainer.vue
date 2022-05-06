@@ -1,10 +1,6 @@
 <template>
   <div>
-<<<<<<< HEAD
     <canvas id="og" class="tableimg" max-width="224" height="224" data-bs-toggle="modal" data-bs-target="#compareModal"></canvas>
-=======
-    <canvas id="original" class="tableimg clickable" max-width="224" height="224" data-bs-toggle="modal" data-bs-target="#compareModal"></canvas>
->>>>>>> a110a16cf6872331982be5bdfe89d87e2a6dab15
     <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
