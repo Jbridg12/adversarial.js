@@ -264,10 +264,9 @@ export function changeAttack(attack){
 
 // Generate button
 export function attack(){
-  if (document.getElementById("loadSpinner").style.display == "block") {
-    resetAdvPrediction();
-    generateAdv();
-  }
+  showLoader();
+  resetAdvPrediction();
+  generateAdv();
 }
 
 export function download(){
@@ -294,7 +293,7 @@ export function resetAdv() {
   context.clearRect(0, 0, adv.width, adv.height)
 }
 
-export async function showLoader() {
+export function showLoader() {
   var myDiv = document.getElementById("loadSpinner");
   myDiv.setAttribute("style", "display: block;");
 }
@@ -467,7 +466,7 @@ async function generateAdv() {
 
   let attack;
   console.log(selectedAttack);
-  await showLoader();
+  showLoader();
   switch (selectedAttack) {
     case 'fgsmTargetedWeak': attack = fgsmTargeted; break;
     case 'fgsmTargetedMedium': attack = fgsmTargeted; break;
