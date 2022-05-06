@@ -705,4 +705,3 @@ async function drawImg(img, element) {
     await tf.browser.toPixels(resizedImg, canvas);
   }
 }
-/* eslint-enable no-unused-vars */
